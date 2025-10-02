@@ -114,6 +114,12 @@ void cm55_ipc_pipe_isr(void);
 bool cm33_ipc_has_received_message(void);
 void cm33_ipc_safe_copy_last_payload(ipc_payload_t* target);
 
+/* A mechanism through which the application can get the last recorded/cached detection.
+    Invoking this call will return true if there was a detection. 
+    Invoking this call will also clear the last detection if there was one in the first place.
+   */
+bool cm33_ipc_safe_get_and_clear_cached_detection(ipc_payload_t* target);
+
 /* App functions for cm55 */
 ipc_payload_t* cm55_ipc_get_payload_ptr(void);
 void cm55_ipc_send_to_cm33(void);

@@ -69,6 +69,8 @@ static uint32_t ipc_sema_array[CY_IPC_SEMA_COUNT / CY_IPC_SEMA_PER_WORD];
    while guarding the copying with taskENTER_CRITICAL() and taskEXIT_CRITICAL()
 */
 static ipc_msg_t ipc_recv_msg = {0};
+static ipc_payload_t ipc_last_detection_payload = {0};
+static bool ipc_has_saved_detection = false; // will be set upon receipt. reset when value is checked
 static bool ipc_has_received_message = false; // will be set upon receipt. reset when value is checked
 
 
@@ -82,6 +84,10 @@ static void cm33_msg_callback(uint32_t * msg_data)
     if (msg_data != NULL) {
         /* Copy the message received into our own copy IPC structure */
         memcpy(&ipc_recv_msg, (void *) msg_data, sizeof(ipc_recv_msg));
+        if (ipc_recv_msg.payload.label_id != 0) {
+            memcpy(&ipc_last_detection_payload, &ipc_recv_msg.payload, sizeof(ipc_payload_t));
+            ipc_has_saved_detection = true;
+        }
         ipc_has_received_message = true;
     }
 }
@@ -183,4 +189,20 @@ void cm33_ipc_safe_copy_last_payload(ipc_payload_t* target)
     taskENTER_CRITICAL();
     memcpy(target, &ipc_recv_msg.payload, sizeof(ipc_payload_t));
     taskEXIT_CRITICAL();
+}
+
+bool cm33_ipc_safe_get_and_clear_cached_detection(ipc_payload_t* target)
+{
+    taskENTER_CRITICAL();
+    if (ipc_has_saved_detection) {
+        memcpy(target, &ipc_last_detection_payload, sizeof(ipc_payload_t));
+        ipc_has_saved_detection = false;
+        taskEXIT_CRITICAL();
+        return true;
+    } else { 
+        // else use the last payload - it will not have a detection
+        memcpy(target, &ipc_recv_msg.payload, sizeof(ipc_payload_t));
+        taskEXIT_CRITICAL();
+        return false;
+    }
 }
