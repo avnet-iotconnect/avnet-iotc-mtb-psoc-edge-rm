@@ -1,1 +1,1 @@
-# iotc-mtb-e84-ready-model
+# iotc-mtb-e84-deepcraft-ready-model
