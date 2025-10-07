@@ -387,7 +387,8 @@ void processing_task(void *pvParameters)
                     }
                     /* print triggered class and the triggered time since IMAI Initial. */
                     printf("%s\n", class_map[pred_idx]);
-                    Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
+                    // Do not control the LED:
+                    // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
                     led_off = 0;
                     ledon_t = tick;
                 }
@@ -404,7 +405,9 @@ void processing_task(void *pvParameters)
                     if((tick - ledon_t) > 500)
                     {
                         /* turn on LED */
-                        Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
+                        // Do not control the LED:
+                        // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
+                        ;
                     }
                     led_off = 1;
                 }
