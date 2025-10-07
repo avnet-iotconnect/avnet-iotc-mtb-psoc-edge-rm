@@ -334,8 +334,8 @@ void audio_task(void *pvParameters)
                         char timeString[9];
                         get_time_from_millisec_audio(t, timeString);
                         printf("%s %s\r\n",LABELS[1],timeString);
-
-                        Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
+                        // Do not control the LED:
+                        // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
                         led_off = 0;
                         led_on = tick1;
                     }
@@ -353,7 +353,8 @@ void audio_task(void *pvParameters)
                         /* Turn off LED after the LED is on for 500ms */
                         if((tick1 - led_on) > LED_STOP_COUNT)
                         {
-                            Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
+                            // Do not control the LED:
+                            // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
                         }
                         led_off = 1;
                     }
