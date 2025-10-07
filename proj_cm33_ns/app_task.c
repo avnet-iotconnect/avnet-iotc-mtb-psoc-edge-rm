@@ -54,9 +54,6 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-/* Configuration file for Wi-Fi and MQTT client */
-#include "wifi_config.h"
-#include "app_config.h"
 
 /* Middleware libraries */
 #include "cy_retarget_io.h"
@@ -67,17 +64,15 @@
 
 /* LwIP header files */
 #include "lwip/netif.h"
-#include "retarget_io_init.h"
-#include "ipc_communication.h"
+
 
 #include "iotconnect.h"
-#ifdef ML_DEEPCRAFT_CM33
-#include "stdlib.h"
 
-#include "imu.h"
-#include "human_activity.h"
-static void cm33_ml_deepcraft_init(void);
-#endif /* ML_DEEPCRAFT_CM33 */
+#include "retarget_io_init.h"
+#include "ipc_communication.h"
+#include "wifi_config.h"
+#include "app_config.h"
+
 
 /******************************************************************************
 * Macros
@@ -132,6 +127,7 @@ static cy_wcm_config_t wcm_config;
 
 #define APP_VERSION		"1.0.0"
 static bool is_demo_mode = false;
+
 static int reporting_interval = 2000;
 
 /******************************************************************************
