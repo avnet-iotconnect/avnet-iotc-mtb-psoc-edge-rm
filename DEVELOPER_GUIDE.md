@@ -28,55 +28,36 @@ Firmware logs will be available on that COM port.
   
 ## Building the Software
 
-> [!NOTE]
-> If you wish to contribute to this project or work with your own git fork,
-> or evaluate an application version that is not yet released, the setup steps will change 
-> the setup steps slightly.
-> In that case, read [DEVELOPER_LOCAL_SETUP.md](https://github.com/avnet-iotconnect/avnet-iotc-mtb-basic-example/blob/release-v7.0.1/DEVELOPER_LOCAL_SETUP.md) 
-> before continuing to the steps below.
-> 
-> Follow the [Contributing Guidelines](https://github.com/avnet-iotconnect/iotc-c-lib/blob/master/CONTRIBUTING.md) 
-> if you are contributing to this project.
-
-- Clone the [this project repository](https://github.com/avnet-iotconnect/iotc-mtb-e84-deepcraft-ready-model/tree/main). 
+- Clone the [this repository](https://github.com/avnet-iotconnect/iotc-mtb-e84-deepcraft-ready-model/tree/main). 
 - Download [ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/). Install the ***ModusToolbox&trade; Setup*** software. The software may require you to log into your Infineon account. In ***ModusToolbox&trade; Setup*** software, download & install the items below:
   - *ModusToolbox&trade; Tools Package* 3.6 or above.
   - *ModusToolbox&trade; Programming tools* 1.6.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
-  - Eclipse IDE for *ModusToolbox&trade; 2025.8.0 or Microsoft VsCode 
+  - Microsoft Visual Studio Code 1.105.0 or above. 
 
-- Launch Eclipse IDE For ModusToolbox&trade; application.
-- When prompted for the workspace, choose an arbitrary location for your workspace and click the *Launch* button.
-- Select *New Application* from the QuickPanel on left side.
+- Launch ModusToolbox&trade; Dashboard. Select Target IDE `Microsoft Visual Studio` from drop down and then click *Launch Project Creator*.
 - Select one of the supported boards from [README.md](README.md) and click *Next*.
-- At the top of the window, choose a path where the project will be installed.
-On Windows, ensure that this path is *short* starting from a root of a drive like *C:\iotc-workspace*,
-or else ong paths will trigger the 256 Windows path limit and cause compiling errors.
-- Make sure that *Eclipse IDE for ModusToolbox&trade;* is the Target IDE. 
-[VsCode integration](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2) works and is tested, but not part of this guide.
-
-- Click the button **Browse for Application** and browse to the *iotc-mtb-e84-deepcraft-ready-model* previously cloned repo's folder.
-- Click the *Create* button at the bottom of the screen.
-
-> [!TIP]
-> The Compilation Database Parser makes it so that Eclipse IDE understands compile time preprocessor defines
-> applied to the project while editing code.
-> Depending on the development stage, one can improve Eclipse build time and responsiveness by disabling it using this method:
-> Right-click the project and select Properties > C/C++ General >Preprocessor Include Paths > Providers, 
-> and deselect the Compilation Database Parser check box.
-
-- At this point you should be able to build and run the application by clicking the application first in 
-the project explorer panel and then clicking the *application-name-Debug MultiCore* (*KitProg3_MiniProg4*) in *Quick Panel* at the bottom left of the IDE screen.
-- Examine the console messages on the serial terminal. Once the device boots up,
+- Click *Browse…* next to *Application(s) Root Path* to create or specify a folder where the application will
+be created.
+- Pull down the Target IDE menu and select *Microsoft Visual Studio Code*.
+- Click the button *`Browse for Application`* and browse to the previously cloned repo's folder *iotc-mtb-e84-deepcraft-ready-model*.
+- Close the Project Creater when the project is created successfully.
+- Open VS code, and Select *File > Open Workspace from File*, navigate to the location of the application that was just
+created, select the workspace file, and click Open.
+- Depending on your settings in VS Code, you may see a message about trusting the authors. If so, click Yes, I
+trust the authors.
+- To build the project, select *Terminal > Run Task*. Then select *Build* from the dropdown.
+- To debug the project, connect the board, select *Run > Start Debugging*. 
+- When running or debugging, examine the console messages on the serial terminal. Once the device boots up,
 it will print the auto-generated DUID (Device Unique ID) that you will use to 
 create the device in the steps at [Cloud Account Setup](#cloud-account-setup) below in this guide:
-``` 
-Generated device unique ID (DUID) is: e84-rm-xxxxxxxx
-```
+  ``` 
+   Generated device unique ID (DUID) is: e84-rm-xxxxxxxx
+  ```
 - Once the Cloud Account Setup is complete,
 In the **.proj_cm33_ns** project directory modify **app_config.h** per your
 IoTConnect device setup and **wifi_config.h** per your WiFi connection settings.
-- Debug or Program the application.
+- Run or debug to connect the board to /IOTCONNECT.
 
 ## Cloud Account Setup
 An IoTConnect account is required.  If you need to create an account, a free 2-month subscription is available.

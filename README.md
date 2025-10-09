@@ -47,10 +47,8 @@ Ensure the following jumper and pin configuration on board.
 
 ## Setup the Project
 
-
-
-To build the project, please refer to the 
-[/IOTCONNECT ModusToolbox&trade; DEVELOPER GUIDE](DEVELOPER_GUIDE.md) 
+To setup the project, please refer to the 
+[/IOTCONNECT ModusToolbox&trade; PSOC Edge DEVELOPER GUIDE](DEVELOPER_GUIDE.md) 
 and note the following:
 
 - To select the model, update the `MODEL_SELECTION` variable in the *Makefile* of .proj_cm55 project.
@@ -67,12 +65,9 @@ and note the following:
 
 - Use the [device-template.json](/files/device-template.json) as the Device Template on /IOTCONNECT. Right-click the link and select "Save Link As" to download the file.
 
-- [Tutorial video](https://saleshosted.z13.web.core.windows.net/media/ifx/videos/IFX%20Modus%20with%20IoTConnect.mp4) of creating a new project with /IOTCONNECT in ModusToolbox&trade; for your reference.
-
-
 ## Running the Demo
 
-- For sound models, once the board connects to /IOTCONNECT, it will start processing microphone input and attempt to detect the corresponding sound. 
+- For audio models, once the board connects to /IOTCONNECT, it will start processing microphone input and attempt to detect the corresponding sound. 
 This can be tested by placing the board in such way so that the microphone close to the PC speaker.
 For best results, the microphone should be placed very close and pointed directly towards the speaker.
 
@@ -99,5 +94,5 @@ For best results, the microphone should be placed very close and pointed directl
     | Command                  | Argument Type     | Description                                                                                                                                                                 |
     |:-------------------------|-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     | `board-user-led`         | String (on/off)   | Turn the board LED on or off                                                                                                                                                |
-    | `set-reporting-interval` | Number (eg. 4000) | Set telemetry reporting interval in milliseconds.  By default, the application will report gestures every 1000ms and Audio every 2500ms                                     |
-    | `demo-mode`              | String (on/off)   | Enable demo mode. In this mode the application will send telemetry to /IOTCONNECT for a longer period         
+    | `set-reporting-interval` | Number (eg. 2000) | Set telemetry reporting interval in milliseconds.  By default, the application will report every 2000ms                                     |
+          
