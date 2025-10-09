@@ -28,7 +28,7 @@ Firmware logs will be available on that COM port.
   
 ## Building the Software
 
-- Clone the [this repository](https://github.com/avnet-iotconnect/iotc-mtb-e84-deepcraft-ready-model/tree/main). 
+- Clone [this repository](https://github.com/avnet-iotconnect/iotc-mtb-e84-deepcraft-ready-model/tree/main). 
 - Download [ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/). Install the ***ModusToolbox&trade; Setup*** software. The software may require you to log into your Infineon account. In ***ModusToolbox&trade; Setup*** software, download & install the items below:
   - *ModusToolbox&trade; Tools Package* 3.6 or above.
   - *ModusToolbox&trade; Programming tools* 1.6.0.
