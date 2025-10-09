@@ -33,7 +33,7 @@ Firmware logs will be available on that COM port.
   - *ModusToolbox&trade; Tools Package* 3.6 or above.
   - *ModusToolbox&trade; Programming tools* 1.6.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
-  - Microsoft Visual Studio Code 1.105.0 or above. 
+  - Microsoft Visual Studio Code 1.105.0 or above. [(VS Code for ModusToolbox&trade; guide)](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2)
 
 - Launch ModusToolbox&trade; Dashboard. Select Target IDE `Microsoft Visual Studio` from drop down and then click *Launch Project Creator*.
 - Select one of the supported boards from [README.md](README.md) and click *Next*.
