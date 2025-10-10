@@ -94,7 +94,8 @@ guide and select one of the two implementations of IoTConnect:
 #### IoTConnect Device Template Setup
 
 An IoTConnect *Device Template* will need to be created or imported.
-* Download the premade  [Device Template](files/device-template.json).
+* Download the premade [device-template.json](files/device-template.json) 
+(Open the link then click the *Download Raw File* icon on the right).
 * Import the template into your IoTConnect instance:  [Importing a Device Template](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) guide  
 > **Note:**  
 > For more information on [Template Management](https://docs.iotconnect.io/iotconnect/concepts/cloud-template/) please see the [IoTConnect Documentation](https://iotconnect.io) website.

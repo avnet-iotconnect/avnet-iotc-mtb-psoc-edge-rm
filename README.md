@@ -1,4 +1,4 @@
-## Introduction
+## Avnet PSOC™ Edge DEEPCRAFT™ Ready Models
 
 This demo project is the integration of Infineon's [PSOC&trade; Edge MCU: DEEPCRAFT&trade; Ready Model deployment](https://github.com/Infineon/mtb-example-psoc-edge-ml-deepcraft-deploy-ready-model/tree/master)
 and [Avnet /IOTCONNECT ModusToolbox&trade; SDK](https://github.com/avnet-iotconnect/avnet-iotc-mtb-sdk). 
@@ -46,11 +46,10 @@ Ensure the following jumper and pin configuration on board.
 
 > **Note:** This hardware setup is not required for KIT_PSE84_AI.
 
-## Setup the Project
+## Setup The Project
 
 To setup the project, please refer to the 
-[/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md) 
-and note the following:
+[/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
 
 - To select the model, update the `MODEL_SELECTION` variable in the *Makefile* of proj_cm55 project.
    
@@ -64,9 +63,8 @@ and note the following:
 
 > **Note:** Currently, gesture detection model is supported only for the PSOC&trade; Edge AI kit.
 
-- Use the [device-template.json](files/device-template.json) as the Device Template on /IOTCONNECT. Right-click the link and select "Save Link As" to download the file.
 
-## Running the Demo
+## Running The Demo
 
 - For audio models, once the board connects to /IOTCONNECT, 
 it will start processing microphone input and attempt to detect the corresponding sound. 
