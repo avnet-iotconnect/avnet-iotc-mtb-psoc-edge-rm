@@ -4,10 +4,6 @@ This document demonstrates the steps of setting up the Infineon  PSOC™ Edge MC
 for connecting to Avnet's IoTConnect Platform. Supported boards are listed in 
 the [README.md](README.md).
 
-## Supported Toolchains (make variable 'TOOLCHAIN')
-
-- GNU Arm&reg; Embedded Compiler v14.2.1 (`GCC_ARM`) – Default value of `TOOLCHAIN`
-
 ## Prerequisites
 * PC with Windows. The project is tested with Windows 10, though the setup should work with Linux or Mac as well.
 * USB-A to USB-C data cable
@@ -16,7 +12,8 @@ the [README.md](README.md).
 * A registered [myInfineon Account](https://www.infineon.com/sec/login)
 
 ## Hardware Setup
-* Connect the board to a USB port on your PC. A new USB device should be detected.
+* Identify the debug USB port for your board from the board's user manual.
+* Connect the board's debug port to a USB port on your PC. A new USB device should be detected.
 Firmware logs will be available on that COM port.
 * Open the Serial Terminal application and configure as shown below:
   * Port: (Select the COM port with the device)
@@ -28,36 +25,48 @@ Firmware logs will be available on that COM port.
   
 ## Building the Software
 
-- Clone [this repository](https://github.com/avnet-iotconnect/iotc-mtb-e84-deepcraft-ready-model/tree/main). 
+> [!NOTE]
+> If you wish to contribute to this project, work with your own git fork,
+> or evaluate an application version that is not yet released, the setup steps will change 
+> the setup steps slightly.
+> In that case, read [DEVELOPER_LOCAL_SETUP.md](https://github.com/avnet-iotconnect/avnet-iotc-mtb-basic-example/blob/main/DEVELOPER_LOCAL_SETUP.md)
+> (From the PSOC6 Basic Sample repo)
+> before continuing to the steps below.
+> Follow the [Contributing Guidelines](https://github.com/avnet-iotconnect/iotc-c-lib/blob/master/CONTRIBUTING.md) 
+> if you are contributing to this project.
+
 - Download [ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/). Install the ***ModusToolbox&trade; Setup*** software. The software may require you to log into your Infineon account. In ***ModusToolbox&trade; Setup*** software, download & install the items below:
   - *ModusToolbox&trade; Tools Package* 3.6 or above.
-  - *ModusToolbox&trade; Programming tools* 1.6.0.
+  - *ModusToolbox&trade; Edge Protect Security Suite* 1.6.0.
+  - *ModusToolbox&trade; Programming Tools* 1.6.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
-  - Microsoft Visual Studio Code 1.105.0 or above. [(VS Code for ModusToolbox&trade; guide)](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2)
+  - Microsoft Visual Studio Code 1.105.0 or newer. [(VS Code for ModusToolbox&trade; guide)](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2)
 
-- Launch ModusToolbox&trade; Dashboard. Select Target IDE `Microsoft Visual Studio` from drop down and then click *Launch Project Creator*.
+
+- Launch ModusToolbox&trade; Dashboard. Select Target IDE `Microsoft Visual Studio` 
+from the dropdown on top-right and then click *Launch Project Creator*.
 - Select one of the supported boards from [README.md](README.md) and click *Next*.
-- Click *Browse…* next to *Application(s) Root Path* to create or specify a folder where the application will
-be created.
-- Pull down the Target IDE menu and select *Microsoft Visual Studio Code*.
-- Click the button *`Browse for Application`* and browse to the previously cloned repo's folder *iotc-mtb-e84-deepcraft-ready-model*.
-- Close the Project Creater when the project is created successfully.
-- Open VS code, and Select *File > Open Workspace from File*, navigate to the location of the application that was just
-created, select the workspace file, and click Open.
-- Depending on your settings in VS Code, you may see a message about trusting the authors. If so, click Yes, I
-trust the authors.
-- To build the project, select *Terminal > Run Task*. Then select *Build* from the dropdown.
-- To debug the project, connect the board, select *Run > Start Debugging*. 
-- When running or debugging, examine the console messages on the serial terminal. Once the device boots up,
-it will print the auto-generated DUID (Device Unique ID) that you will use to 
-create the device in the steps at [Cloud Account Setup](#cloud-account-setup) below in this guide:
-  ``` 
-   Generated device unique ID (DUID) is: e84-rm-xxxxxxxx
-  ```
-- Once the Cloud Account Setup is complete,
-In the **.proj_cm33_ns** project directory modify **app_config.h** per your
+- For the Application(s) Root Path, specify or browse to a directory where the application will be created.
+It is preferred to use a short path due to Windows OS file path limits.
+- Ensure that the Target IDE is *Microsoft Visual Studio Code*.
+- Checkmark this repo's application by browsing Template Applications or searching for this application name.
+- It is recommended to override the New Application Name value to a shorter name.
+- Click *Create*.
+- Close the Project Creator when the project is created successfully.
+- Open VS code, and Select *File -> Open Workspace from File*, navigate to the location of the application that was just
+created, select the workspace file, and click *Open*.
+- Depending on your settings in VS Code, you may see a message about trusting the authors. 
+If so, click *Yes, I trust the authors*.
+
+- Once the [Cloud Account Setup](#cloud-account-setup) below is complete,
+In the *proj_cm33_ns* project directory modify **app_config.h** per your
 IoTConnect device setup and **wifi_config.h** per your WiFi connection settings.
-- Run or debug to connect the board to /IOTCONNECT.
+
+- To build the project, select *Terminal -> Run Task*. Then select *Build* from the dropdown.
+- To program the project onto the board, connect the board, 
+select *Terminal -> Run Task*. Then select *Program* from the dropdown.
+- If you wish to debug the project, select *Run > Start Debugging* instead.
+
 
 ## Cloud Account Setup
 An IoTConnect account is required.  If you need to create an account, a free 2-month subscription is available.
@@ -92,17 +101,18 @@ An IoTConnect *Device Template* will need to be created or imported.
 
 #### IoTConnect Device Creation and Setup
 
-* Create a new device in the IoTConnect portal. (Follow the [Create a New Device](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/create_new_device.md) guide for a detailed walkthrough.)
-* Enter the **DUID** noted from earlier into the *Unique ID* field
-* Enter the same DUID or descriptive name of your choosing as *Display Name* to help identify your device
-* Select the template from the dropdown box that was just imported ("psoc6mtb")
-* Ensure "Auto-generated" is selected under *Device certificate*
-* Click **Save & View**
-* In the info panel, click the Connection Infohyperink on top right and 
+* Create a new device in the IoTConnect portal. (Follow the [Create a New Device](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/create_new_device.md) guide for a detailed walkthrough).
+* Choose a name for your device and enter it into the *Unique ID* field (also called Device Unique ID - DUID in this guide).
+* Enter the same DUID or descriptive name of your choosing as *Display Name* to help identify your device.
+* Select the template from the dropdown box that was just imported.
+* Ensure "Auto-generated" is selected under *Device certificate*.
+* Click **Save & View**.
+* In the *Info* panel, click the *Connection Info* hyperink on top right and 
 download the certificate by clicking the download icon on the top right
 ![download-cert.png](media/download-cert.png).
+* Provide values for DUID, CPID and ENV from the above steps into the **proj_cm33_ns/app_config.h** file.
 * You will need to open the device certificate and private key files and 
-provide them in **.proj_cm33_ns/app_config.h** formatted specified as a C string #define like so:
+provide them in **proj_cm33_ns/app_config.h** in the format specified as a C string #define like so:
   ```
   #define IOTCONNECT_DEVICE_CERT \
   "-----BEGIN CERTIFICATE-----\n" \
@@ -123,10 +133,6 @@ provide them in **.proj_cm33_ns/app_config.h** formatted specified as a C string
   "khPBBRXBKbDpQ02LgX6tsJUEbGbnPC94LfwnkTuVx/CFKWZfmg==\n" \
   "-----END CERTIFICATE-----"
   ```
-  The same format needs to be used for the private key as `#define IOTCONNECT_DEVICE_KEY`
+* The same format needs to be used for the private key as `#define IOTCONNECT_DEVICE_KEY`
 
-At this point, the device can be reprogrammed with the newly built firmware.
-
-## OTA Support
-
-Not availabe now.
+At this point, the application is set up with /IOTCONNECT credentials.

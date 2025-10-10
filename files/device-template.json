@@ -1,6 +1,6 @@
 {
-    "code": "e84rm",
-    "name": "e84rm",
+    "code": "pedgerm",
+    "name": "pedgerm",
     "authType": 2,
     "attributes": [
         {
@@ -18,19 +18,19 @@
 		{
             "name": "class_id",
             "type": "INTEGER",
-            "description": "",
+            "description": "Detected class numeric index",
             "unit": null
         },
 		{
             "name": "class",
             "type": "STRING",
-            "description": "",
+            "description": "Detected class name",
             "unit": null
         },
 		{
             "name": "event_detected",
             "type": "BOOLEAN",
-            "description": "",
+            "description": "Detected true when an actual event has been detected",
             "unit": null
         }
     ],
@@ -39,21 +39,14 @@
             "name": "board-user-led",
             "command": "board-user-led",
             "requiredParam": true,
-            "requiredAck": false,
-            "isOTACommand": false
-        },
-        {
-            "name": "demo-mode",
-            "command": "demo-mode",
-            "requiredParam": true,
-            "requiredAck": false,
+            "requiredAck": true,
             "isOTACommand": false
         },
 		{
-            "name": "set-reporting-interval ",
-            "command": "set-reporting-interval ",
+            "name": "set-reporting-interval",
+            "command": "set-reporting-interval",
             "requiredParam": true,
-            "requiredAck": false,
+            "requiredAck": true,
             "isOTACommand": false
         }
     ],
