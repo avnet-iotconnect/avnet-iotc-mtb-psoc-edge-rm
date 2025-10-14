@@ -19,6 +19,11 @@ Pre-trained models that are ready for production, referred to as "Ready Models,"
 
 This project has a three project structure: CM33 secure, CM33 non-secure, and CM55 projects. All three projects are programmed to the external QSPI flash and executed in Execute in Place (XIP) mode. Extended boot launches the CM33 secure project from a fixed location in the external flash, which then configures the protection settings and launches the CM33 non-secure application. Additionally, CM33 non-secure application enables CM55 CPU and launches the CM55 application.
 
+The M55 processor performs the DEEPCRAFT™ model heavy lifting and reports the data via IPC to the M33 processor.
+The M33 Non-Secure application is a custom /IOTCONNECT application that is receiving the IPC messages, 
+processing the data and sending it to /IOTCONNECT. 
+This application can receive Cloud-To-Device commands as well and control one of the board LEDs or control the application flow.    
+
 ## Requirements
 
 - [ModusToolbox&trade;](https://www.infineon.com/modustoolbox) v3.6 or later (tested with v3.6)
@@ -52,7 +57,7 @@ To setup the project, please refer to the
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
 
 - To select the model, update the `MODEL_SELECTION` variable in the *Makefile* of proj_cm55 project.
-   
+
 | Model name         | Macro           |
 |:-------------------|:----------------|
 | Cough detection    | `COUGH_MODEL`   |
@@ -93,8 +98,7 @@ See the original Infineon project github page for more details on how to perform
 ```
 - The following commands can be sent to the device using the /IOTCONNECT Web UI:
 
-    | Command                  | Argument Type     | Description                                                                                                                                                                 |
+    | Command                  | Argument Type     | Description                                                        |
     |:-------------------------|-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     | `board-user-led`         | String (on/off)   | Turn the board LED on or off                                                                                                                                                |
     | `set-reporting-interval` | Number (eg. 2000) | Set telemetry reporting interval in milliseconds.  By default, the application will report every 2000ms                                     |
-          

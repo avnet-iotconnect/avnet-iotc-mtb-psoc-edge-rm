@@ -212,26 +212,27 @@ int main(void)
     
     /* Setup IPC communication for CM33 */
     cm33_ipc_communication_setup();
-    Cy_SysLib_Delay(50);
-    
+
     /* \x1b[2J\x1b[;H - ANSI ESC sequence to clear screen. */
     printf("\x1b[2J\x1b[;H");
     printf("===============================================================\n");
-
     printf("PSOC Edge MCU: /IOTCONNECT Client\n");
+    printf("===============================================================\n");
 
-    printf("===============================================================\n\n");
+    printf("CM33 /IOTCONNECT App Task Starting. Waiting for CM55 IPC to start...\n");
+    Cy_SysLib_Delay(20); // wait for this to print - roughtly 20 ms
 
     /* Enable CM55. CY_CORTEX_M55_APPL_ADDR must be updated if CM55 memory layout is changed. */
     Cy_SysEnableCM55(MXCM55, CY_CM55_APP_BOOT_ADDR, CM55_BOOT_WAIT_TIME_US);
+
+    /* DO NOT PRINT ANYTHING after this line until we sync. This should avoid partial lines in logs. */
 
     result = xTaskCreate(app_task, "IOTC APP task", APP_TASK_STACK_SIZE,
                 NULL, APP_TASK_PRIORITY, NULL);
     if( pdPASS != result ) {
 		handle_app_error();
 	}
-             
-            
+
     if( pdPASS == result )
     {
         /* Start the FreeRTOS scheduler. */

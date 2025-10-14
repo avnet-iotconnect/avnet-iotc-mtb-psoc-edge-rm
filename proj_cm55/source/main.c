@@ -117,7 +117,9 @@ int main(void)
 
     Cy_SysLib_Delay(50);
 
+#if 0
     printf("\x1b[2J\x1b[;H");
+#endif
 
     /* Create the RTOS task */
 #ifdef GESTURE_MODEL

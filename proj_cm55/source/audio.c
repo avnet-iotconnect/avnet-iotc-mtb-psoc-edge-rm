@@ -396,7 +396,10 @@ void audio_task(void *pvParameters)
 cy_rslt_t create_audio_task(void)
 {
     BaseType_t status;
+
+    #ifdef CM55_ENABLE_STARTUP_PRINTS
     printf("****************** DEEPCRAFT Ready Model: %s ****************** \r\n\n", LABELS[1]);
+    #endif
 
     /* Create the RTOS task */
     status = xTaskCreate(audio_task, AUDIO_TASK_NAME, AUDIO_TASK_STACK_SIZE, NULL, AUDIO_TASK_PRIORITY, &audio_task_handler);
