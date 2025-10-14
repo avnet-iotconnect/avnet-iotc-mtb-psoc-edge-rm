@@ -78,20 +78,24 @@
 * Macros
 ******************************************************************************/
 
-#define APP_VERSION "01.01.00"
-
-// prep for supporting this
-#if 0
-#if defined(Smart_Lights_Demo)
-#define APP_VERSION ("S-" APP_VERSION_BASE)
-#elif defined(LED_Demo)
-#define APP_VERSION ("L-" APP_VERSION_BASE)
-#elif defined(Cooktop_Demo)
+#define APP_VERSION_BASE "1.1.0"
+// Defined in common.mk then dereference in this Makefile with DEFINES+=
+#if defined(COUGH_MODEL)
+#define APP_VERSION ("C-" APP_VERSION_BASE)
+#elif defined(ALARM_MODEL)
+#define APP_VERSION ("A-" APP_VERSION_BASE)
+#elif defined(BABYCRY_MODEL)
+#define APP_VERSION ("B-" APP_VERSION_BASE)
+#elif defined(DIRECTIONOFARRIVAL_MODEL)
+#define APP_VERSION ("D-" APP_VERSION_BASE)
+#elif defined(FALLDETECTION_MODEL)
+#define APP_VERSION ("F-" APP_VERSION_BASE)
+#elif defined(GESTURE_MODEL)
 #define APP_VERSION ("B-" APP_VERSION_BASE)
 #else
 #define APP_VERSION ("?-" APP_VERSION_BASE)
 #endif
-#endif
+
 
 
 /* Time in milliseconds to wait before creating the publisher task. */
@@ -140,8 +144,6 @@ static mtb_hal_sdio_t sdio_instance;
 static cy_stc_sd_host_context_t sdhc_host_context;
 static cy_wcm_config_t wcm_config;
 
-
-#define APP_VERSION		"1.0.0"
 static bool is_demo_mode = false;
 
 static int reporting_interval = 2000;

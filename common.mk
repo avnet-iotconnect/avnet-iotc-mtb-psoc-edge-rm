@@ -64,4 +64,17 @@ endif
 # NOTE: Check the JSON file for the command parameters
 COMBINE_SIGN_JSON?=configs/boot_with_extended_boot.json
 
+
+# model selection
+
+# For KIT_PSE84_EVAL_EPC2, KIT_PSE84_EVAL_EPC4 and KIT_PSE84_AI below models are supported.
+# COUGH_MODEL
+# ALARM_MODEL
+# BABYCRY_MODEL
+# DIRECTIONOFARRIVAL_MODEL
+# FALLDETECTION_MODEL
+# GESTURE_MODEL (For KIT_PSE84_AI only)
+
+MODEL_SELECTION = BABYCRY_MODEL
+
 include ../common_app.mk

@@ -41,17 +41,7 @@ include ../common.mk
 # Basic Configuration
 ################################################################################
 
-# model selection
-
-# For KIT_PSE84_EVAL_EPC2, KIT_PSE84_EVAL_EPC4 and KIT_PSE84_AI below models are supported.
-# COUGH_MODEL
-# ALARM_MODEL
-# BABYCRY_MODEL
-# DIRECTIONOFARRIVAL_MODEL
-# FALLDETECTION_MODEL
-# GESTURE_MODEL (For KIT_PSE84_AI only)
-
-MODEL_SELECTION = BABYCRY_MODEL
+# model selection: moved to common.mk
 
 ifeq (,$(filter $(TARGET),APP_KIT_PSE84_EVAL_EPC2 APP_KIT_PSE84_EVAL_EPC4))
 else
