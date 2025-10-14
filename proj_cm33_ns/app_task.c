@@ -78,6 +78,22 @@
 * Macros
 ******************************************************************************/
 
+#define APP_VERSION "01.01.00"
+
+// prep for supporting this
+#if 0
+#if defined(Smart_Lights_Demo)
+#define APP_VERSION ("S-" APP_VERSION_BASE)
+#elif defined(LED_Demo)
+#define APP_VERSION ("L-" APP_VERSION_BASE)
+#elif defined(Cooktop_Demo)
+#define APP_VERSION ("B-" APP_VERSION_BASE)
+#else
+#define APP_VERSION ("?-" APP_VERSION_BASE)
+#endif
+#endif
+
+
 /* Time in milliseconds to wait before creating the publisher task. */
 #define TASK_CREATION_DELAY_MS           (2000u)
 

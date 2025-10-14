@@ -1,9 +1,9 @@
 ## Avnet PSOC™ Edge DEEPCRAFT™ Ready Models
 
-This demo project is the integration of Infineon's [PSOC&trade; Edge MCU: DEEPCRAFT&trade; Ready Model deployment](https://github.com/Infineon/mtb-example-psoc-edge-ml-deepcraft-deploy-ready-model/tree/master)
+This demo project is the integration of Infineon's 
+[PSOC&trade; Edge MCU: DEEPCRAFT&trade; Ready Model deployment](https://github.com/Infineon/mtb-example-psoc-edge-ml-deepcraft-deploy-ready-model/tree/release-v1.2.0)
 and [Avnet /IOTCONNECT ModusToolbox&trade; SDK](https://github.com/avnet-iotconnect/avnet-iotc-mtb-sdk). 
 The project includes five different models, where four models detect different sounds: 
-- Siren detection
 - Baby cry detection
 - Cough detection 
 - Alarm detection
@@ -55,7 +55,6 @@ To setup the project, please refer to the
    
 | Model name         | Macro           |
 |:-------------------|:----------------|
-| Siren detection    | `SIREN_MODEL`   |
 | Cough detection    | `COUGH_MODEL`   |
 | Alarm detection    | `ALARM_MODEL`   |
 | Baby cry detection | `BABYCRY_MODEL` |
@@ -72,8 +71,7 @@ This can be tested by placing the board in such way so that the microphone close
 
 
 - The following YouTube sound clips can be used for testing:
-  * [Siren](https://www.youtube.com/watch?v=s5bwBS27A1g)
-  * [Baby Cry](https://www.youtube.com/watch?v=Rwj1_eWltJQ&t=227s)
+  * [Baby Cry](https://www.youtube.com/watch?v=Rwj1_eWltJQ&t=265s)
   * [Cough](https://www.youtube.com/watch?v=Qp09X74kjBc)
   * [Alarm](https://www.youtube.com/watch?v=hFIJaB6kVzk)
 
@@ -91,7 +89,7 @@ See the original Infineon project github page for more details on how to perform
 
 - After a few seconds, the device will connect to /IOTCONNECT, and begin sending telemetry packets similar to the example below:
 ```
->: {"d":[{"d":{"version":"1.0.0","random":32,"class":"siren"}}]}
+>: {"d":[{"d":{"version":"1.0.0","random":32,"class":"baby_cry"}}]}
 ```
 - The following commands can be sent to the device using the /IOTCONNECT Web UI:
 

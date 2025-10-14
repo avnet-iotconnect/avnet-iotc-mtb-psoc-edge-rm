@@ -7,8 +7,8 @@
 #
 ################################################################################
 # \copyright
-# Copyright 2025, Cypress Semiconductor Corporation (an Infineon company)
-# SPDX-License-Identifier: Apache-2.0
+# (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+# Technologies AG.  SPDX-License-Identifier: Apache-2.0
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ MTB_TYPE=PROJECT
 # To change the target, it is recommended to use the Library manager
 # ('make library-manager' from command line), which will also update 
 # Eclipse IDE launch configurations.
-TARGET=APP_KIT_PSE84_AI
+TARGET=APP_KIT_PSE84_EVAL_EPC2
 
 # Name of toolchain to use. Options include:
 #
@@ -42,7 +42,7 @@ TOOLCHAIN=GCC_ARM
 
 # Toolchains supported by this code example. See README.md file.
 # This is used by automated build systems to identify the supported toolchains. 
-MTB_SUPPORTED_TOOLCHAINS?=GCC_ARM ARM LLVM_ARM
+MTB_SUPPORTED_TOOLCHAINS=GCC_ARM ARM LLVM_ARM
 
 # Default build configuration. Options include:
 #
@@ -53,8 +53,6 @@ MTB_SUPPORTED_TOOLCHAINS?=GCC_ARM ARM LLVM_ARM
 # If CONFIG is manually edited, ensure to update or regenerate 
 # launch configurations for your IDE.
 CONFIG=Debug
-
-MTB_SUPPORTED_TOOLCHAINS=GCC_ARM ARM LLVM_ARM
 
 ifeq ($(TOOLCHAIN),GCC_ARM)
     ifeq ($(CONFIG),Release)

@@ -6,36 +6,33 @@
 # Makefile for configuring the Cortex-M55 core project
 #
 ################################################################################
-# Copyright 2025, Cypress Semiconductor Corporation (an Infineon company) or
-# an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
-#
-# This software, including source code, documentation and related
-# materials ("Software") is owned by Cypress Semiconductor Corporation
-# or one of its affiliates ("Cypress") and is protected by and subject to
-# worldwide patent protection (United States and foreign),
-# United States copyright laws and international treaty provisions.
-# Therefore, you may use this Software only as provided in the license
-# agreement accompanying the software package from which you
-# obtained this Software ("EULA").
-# If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
-# non-transferable license to copy, modify, and compile the Software
-# source code solely for use in connection with Cypress's
-# integrated circuit products.  Any reproduction, modification, translation,
-# compilation, or representation of this Software except as specified
-# above is prohibited without the express written permission of Cypress.
-#
-# Disclaimer: THIS SOFTWARE IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, NONINFRINGEMENT, IMPLIED
-# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Cypress
-# reserves the right to make changes to the Software without notice. Cypress
-# does not assume any liability arising out of the application or use of the
-# Software or any product or circuit described in the Software. Cypress does
-# not authorize its products for use in any products where a malfunction or
-# failure of the Cypress product may reasonably be expected to result in
-# significant property damage, injury or death ("High Risk Product"). By
-# including Cypress's product in a High Risk Product, the manufacturer
-# of such system or application assumes all risk of such use and in doing
-# so agrees to indemnify Cypress against all liability.
+# (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+# Technologies AG. All rights reserved.
+# This software, associated documentation and materials ("Software") is
+# owned by Infineon Technologies AG or one of its affiliates ("Infineon")
+# and is protected by and subject to worldwide patent protection, worldwide
+# copyright laws, and international treaty provisions. Therefore, you may use
+# this Software only as provided in the license agreement accompanying the
+# software package from which you obtained this Software. If no license
+# agreement applies, then any use, reproduction, modification, translation, or
+# compilation of this Software is prohibited without the express written
+# permission of Infineon.
+# 
+# Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
+# IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING, BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF
+# THIRD-PARTY RIGHTS AND IMPLIED WARRANTIES SUCH AS WARRANTIES OF FITNESS FOR A
+# SPECIFIC USE/PURPOSE OR MERCHANTABILITY.
+# Infineon reserves the right to make changes to the Software without notice.
+# You are responsible for properly designing, programming, and testing the
+# functionality and safety of your intended application of the Software, as
+# well as complying with any legal requirements related to its use. Infineon
+# does not guarantee that the Software will be free from intrusion, data theft
+# or loss, or other breaches ("Security Breaches"), and Infineon shall have
+# no liability arising out of any Security Breaches. Unless otherwise
+# explicitly approved by Infineon, the Software may not be used in any
+# application where a failure of the Product or any consequences of the use
+# thereof can reasonably be expected to result in personal injury.
 ################################################################################
 
 include ../common.mk
@@ -50,21 +47,22 @@ include ../common.mk
 # COUGH_MODEL
 # ALARM_MODEL
 # BABYCRY_MODEL
-# SIREN_MODEL
+# DIRECTIONOFARRIVAL_MODEL
+# FALLDETECTION_MODEL
 # GESTURE_MODEL (For KIT_PSE84_AI only)
 
-MODEL_SELECTION = SIREN_MODEL
+MODEL_SELECTION = BABYCRY_MODEL
 
 ifeq (,$(filter $(TARGET),APP_KIT_PSE84_EVAL_EPC2 APP_KIT_PSE84_EVAL_EPC4))
 else
-    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL SIREN_MODEL))
+    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL DIRECTIONOFARRIVAL_MODEL FALLDETECTION_MODEL))
         $(error Invalid MODEL_SELECTION "$(MODEL_SELECTION)" for TARGET=$(TARGET))
     endif
 endif
 
 ifeq (,$(filter $(TARGET),APP_KIT_PSE84_AI))
 else
-    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL SIREN_MODEL GESTURE_MODEL))
+    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL GESTURE_MODEL DIRECTIONOFARRIVAL_MODEL FALLDETECTION_MODEL))
         $(error Invalid MODEL_SELECTION "$(MODEL_SELECTION)" for TARGET=$(TARGET))
     endif
 endif
@@ -171,12 +169,6 @@ DEFINES+=BABYCRY_MODEL
 LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/babycry_lib_eval.a
 endif
 
-ifeq (SIREN_MODEL, $(MODEL_SELECTION))
-DEFINES+=SIREN_MODEL
-# Additional / custom libraries to link in to the application.
-LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/siren_lib_eval.a
-endif
-
 ifeq (ALARM_MODEL, $(MODEL_SELECTION))
 DEFINES+=ALARM_MODEL
 # Additional / custom libraries to link in to the application.
@@ -189,12 +181,42 @@ DEFINES+=GESTURE_MODEL
 LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/gesture_lib_eval.a
 endif
 
+ifeq (FALLDETECTION_MODEL, $(MODEL_SELECTION))
+DEFINES+=FALLDETECTION_MODEL
+# Additional / custom libraries to link in to the application.
+LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/fall_lib_eval.a
+endif
 
-ifneq (GESTURE_MODEL, $(MODEL_SELECTION))
-CY_IGNORE+=source/radar.c
-CY_IGNORE+=source/radar
+ifeq (DIRECTIONOFARRIVAL_MODEL, $(MODEL_SELECTION))
+DEFINES+=DIRECTIONOFARRIVAL_MODEL
+# Additional / custom libraries to link in to the application.
+LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/doa_lib_eval.a
+endif
+
+
+ifeq (GESTURE_MODEL, $(MODEL_SELECTION))
+  CY_IGNORE+=source/audio.c
+  CY_IGNORE+=source/imu.c
+  CY_IGNORE+=source/doa.c
 else
-CY_IGNORE+=source/audio.c
+  ifeq (FALLDETECTION_MODEL, $(MODEL_SELECTION))
+    CY_IGNORE+=source/radar.c
+    CY_IGNORE+=source/radar
+    CY_IGNORE+=source/audio.c
+    CY_IGNORE+=source/doa.c
+  else
+    ifeq (DIRECTIONOFARRIVAL_MODEL, $(MODEL_SELECTION))
+      CY_IGNORE+=source/radar.c
+      CY_IGNORE+=source/radar
+      CY_IGNORE+=source/audio.c
+      CY_IGNORE+=source/imu.c
+    else
+      CY_IGNORE+=source/radar.c
+      CY_IGNORE+=source/radar
+      CY_IGNORE+=source/imu.c
+      CY_IGNORE+=source/doa.c
+    endif
+  endif
 endif
 
 # Select softfp or hardfp floating point. Default is softfp.

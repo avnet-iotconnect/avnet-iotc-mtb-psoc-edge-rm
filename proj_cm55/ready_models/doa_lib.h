@@ -36,8 +36,11 @@ typedef struct {
 
 #define IMAI_API_QUEUE
 
-// Model GUID (16 bytes)
-#define IMAI_MODEL_ID {0x49, 0x4d, 0x52, 0x4d, 0x5a, 0x85, 0x07, 0xbf, 0x21, 0x24, 0x70, 0x41, 0xbc, 0x57, 0x38, 0x0a, 0x59, 0x34, 0xdf, 0x95}
+// All symbols in order
+#define IMAI_SYMBOL_MAP {"unlabelled", "N", "S", "W", "E", "NE", "SW", "NW", "SE"}
+
+// Model GUID (20 bytes)
+#define IMAI_MODEL_ID {0x49, 0x4d, 0x52, 0x4d,0x71, 0x36, 0xc1, 0x56, 0xae, 0x4f, 0x3e, 0x47, 0xad, 0x94, 0xfb, 0x7e, 0x05, 0x0e, 0x7c, 0x4e}
 
 // First nibble is bit encoding, second nibble is number of bytes
 #define IMAGINET_TYPES_NONE    (0x0)
@@ -60,30 +63,29 @@ typedef struct {
 #define IMAGINET_TYPES_UINT32    (0x74)
 #define IMAGINET_TYPES_UINT64    (0x78)
 
-// data_out [2] (8 bytes)
-#define IMAI_DATA_OUT_RANK (1)
-#define IMAI_DATA_OUT_SHAPE (((int[]){2})
-#define IMAI_DATA_OUT_COUNT (2)
-#define IMAI_DATA_OUT_TYPE float
-#define IMAI_DATA_OUT_TYPE_ID IMAGINET_TYPES_FLOAT32
-#define IMAI_DATA_OUT_SHIFT 10
-#define IMAI_DATA_OUT_OFFSET 0
-#define IMAI_DATA_OUT_SCALE 1
-#define IMAI_DATA_OUT_SYMBOLS {"unlabelled", "sirens"}
+// dataout [9] (36 bytes)
+#define IMAI_DATAOUT_RANK (1)
+#define IMAI_DATAOUT_SHAPE (((int[]){9})
+#define IMAI_DATAOUT_COUNT (9)
+#define IMAI_DATAOUT_TYPE float
+#define IMAI_DATAOUT_TYPE_ID IMAGINET_TYPES_FLOAT32
+#define IMAI_DATAOUT_SHIFT 9
+#define IMAI_DATAOUT_OFFSET 0
+#define IMAI_DATAOUT_SCALE 1
+#define IMAI_DATAOUT_SYMBOLS {"unlabelled", "N", "S", "W", "E", "NE", "SW", "NW", "SE"}
 
-// data_in [1] (4 bytes)
-#define IMAI_DATA_IN_RANK (1)
-#define IMAI_DATA_IN_SHAPE (((int[]){1})
-#define IMAI_DATA_IN_COUNT (1)
-#define IMAI_DATA_IN_TYPE float
-#define IMAI_DATA_IN_TYPE_ID IMAGINET_TYPES_FLOAT32
-#define IMAI_DATA_IN_SHIFT 0
-#define IMAI_DATA_IN_OFFSET 0
-#define IMAI_DATA_IN_SCALE 1
-#define IMAI_DATA_IN_SYMBOLS { }
+// datain [4] (16 bytes)
+#define IMAI_DATAIN_RANK (1)
+#define IMAI_DATAIN_SHAPE (((int[]){4})
+#define IMAI_DATAIN_COUNT (4)
+#define IMAI_DATAIN_TYPE float
+#define IMAI_DATAIN_TYPE_ID IMAGINET_TYPES_FLOAT32
+#define IMAI_DATAIN_SHIFT 0
+#define IMAI_DATAIN_OFFSET 0
+#define IMAI_DATAIN_SCALE 1
+#define IMAI_DATAIN_SYMBOLS { }
 
-#define IMAI_KEY_MAX (23)
-
+#define IMAI_KEY_MAX (20)
 
 // Return codes
 #define IMAI_RET_SUCCESS 0
@@ -91,6 +93,7 @@ typedef struct {
 #define IMAI_RET_NOMEM -2
 #define IMAI_RET_TIMEDOUT -3
 #define IMAI_RET_OUTOFBOUNDS -4
+
 
 typedef struct PP_config {
     float confidence;     // confidence threshold to be compared against
@@ -105,7 +108,7 @@ typedef struct PP_config {
  * Function to initialise the library, this should be called whenever the program boots up or wakes up
  * to clear the buffers from old irrelevant data
  */
-void IMAI_AED_init(void);
+void IMAI_DOA_init(void);
 
 /**
  * This function is to pass data to the model/library and you should pass the data as it comes
@@ -113,7 +116,7 @@ void IMAI_AED_init(void);
  *                     determined in IMAI_DATA_IN_COUNT
  * RET                 this is an int with a message whether this was performed successfully
  */
-int IMAI_AED_enqueue(const float *restrict data_in);
+int IMAI_DOA_enqueue(const float *restrict data_in);
 
 /**
  * This function is to extract output from the model/library and it should be checked for new predictions everytime a new data point is passed
@@ -121,19 +124,22 @@ int IMAI_AED_enqueue(const float *restrict data_in);
  *                     this will return an array of flags, 1 for trigger and 0 for not trigger
  * RET                 this is an int with a message whether this was performed successfully. If it's not 0 (successful) then data_out is not updated. If -3 (timed out) is returned
  */
-int IMAI_AED_dequeue(int *restrict data_out);
+int IMAI_DOA_dequeue(int *restrict data_out);
 
 /**
  * This function is to adjust the sensitivity of the model/library, which is directly tied to the post processing internal to the library
  * PARAM postprocessing         this is a value for setting the postprocessing for model to activate a trigger. Depending on the model some of these maybe configurable
  * RET                 this is an int with a message whether this was performed successfullyv
  */
-int IMAI_AED_sensitivity(PP_config_t postprocessing);
+ 
+ /* Note: for better performance we recommend using a postprocessing sliding window of 3 predictions. Then check that the prediction is the same, take the average of the confidence and 
+    apply a threshold.*/
+int IMAI_DOA_sensitivity(PP_config_t postprocessing);
 
 /**
  * This function resets the postprocessing to its original settings
  */
-void IMAI_AED_sensitivity_reset(void);
+void IMAI_DOA_sensitivity_reset(void);
 
 
 #endif /* LIBRARY_H_ */
