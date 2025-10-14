@@ -52,6 +52,8 @@
 #include "cy_result.h"
 #include "retarget_io_init.h"
 
+#include "ipc_communication.h"
+
 /*******************************************************************************
  * Global Variables
  ********************************************************************************/
@@ -187,6 +189,8 @@ static void doa_task(void* pvParameters)
             {
                 static uint8_t success_flag;
                 case IMAI_RET_SUCCESS:
+                    ipc_payload_t* payload = cm55_ipc_get_payload_ptr();
+
                     success_flag = 1;
                     prediction_count += 1;
 
@@ -197,6 +201,10 @@ static void doa_task(void* pvParameters)
                             pred_idx = i;
                         }
                     }
+                    
+                    payload->label_id = pred_idx;
+                    strcpy(payload->label, class_map[pred_idx]);
+                    cm55_ipc_send_to_cm33();
 
                     if (pred_idx != 0)
                     {
@@ -206,7 +214,8 @@ static void doa_task(void* pvParameters)
                         }
                         /* print triggered class and the triggered time since IMAI Initial. */
                         printf("%s\n", class_map[pred_idx]);
-                        Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
+                        // Do not control the LED:
+                        // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
                         led_off = 0;
                         led_on = tick1;
                     }
@@ -223,7 +232,8 @@ static void doa_task(void* pvParameters)
                         if((tick1 - led_on) > 500)
                         {
                             /* turn on green LED */
-                            Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
+                            // Do not control the LED:
+                            // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
                         }
                         led_off = 1;
                     }
@@ -265,7 +275,10 @@ static void doa_task(void* pvParameters)
 cy_rslt_t create_doa_task(void)
 {
     BaseType_t status;
+    
+    #ifdef CM55_ENABLE_STARTUP_PRINTS
     printf("****************** DEEPCRAFT Ready Model: Direction of arrival ****************** \r\n\n");
+    #endif
 
     status = xTaskCreate(doa_task, "DOA Task", TASK_DOA_STACK_SIZE,
             NULL, TASK_DOA_PRIORITY, &doa_task_handle);

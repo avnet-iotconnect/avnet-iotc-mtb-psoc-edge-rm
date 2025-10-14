@@ -323,6 +323,7 @@ void audio_task(void *pvParameters)
                     {
                         payload->label_id = 1;
                         strcpy(payload->label, LABELS[1]);
+
                         /* New line when LED from off to on */
                         if ((led_off - CYBSP_LED_STATE_ON) > 0)
                         {
@@ -343,6 +344,7 @@ void audio_task(void *pvParameters)
                     {
                         payload->label_id = 0;
                         strcpy(payload->label, LABELS[0]);
+
                         /* Only print non-label class very 10 predictions */
                         if (prediction_count>DETECTCOUNT)
                         {
@@ -358,7 +360,9 @@ void audio_task(void *pvParameters)
                         }
                         led_off = 1;
                     }
+
                     cm55_ipc_send_to_cm33();
+                    
                     break;
                     
                     case IMAI_RET_NOMEM:

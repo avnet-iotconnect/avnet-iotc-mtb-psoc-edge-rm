@@ -363,6 +363,7 @@ void processing_task(void *pvParameters)
             static uint8_t success_flag;
             case IMAI_RET_SUCCESS:
                 ipc_payload_t* payload = cm55_ipc_get_payload_ptr();
+
                 success_flag = 1;
                 prediction_count += 1;
 
@@ -373,9 +374,11 @@ void processing_task(void *pvParameters)
                         pred_idx = i;
                     }
                 }
+                
                 payload->label_id = pred_idx;
                 strcpy(payload->label, class_map[pred_idx]);
                 cm55_ipc_send_to_cm33();
+
                 if (pred_idx != 0)
                 {
                     if ((led_off - CYBSP_LED_STATE_ON) > 0)
@@ -572,7 +575,10 @@ void xensiv_bgt60trxx_interrupt_handler(void)
 cy_rslt_t create_radar_task(void)
 {
     BaseType_t status;
+
+    #ifdef CM55_ENABLE_STARTUP_PRINTS
     printf("****************** DEEPCRAFT Ready Model: gesture ****************** \r\n\n");
+    #endif
 
     /* Create the RTOS task */
     status = xTaskCreate(radar_task, RADAR_TASK_NAME,

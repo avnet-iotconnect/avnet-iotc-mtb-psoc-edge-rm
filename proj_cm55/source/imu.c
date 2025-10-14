@@ -51,6 +51,7 @@
 #include "timers.h"
 #endif
 
+#include "ipc_communication.h"
 
 /******************************************************************************
  * Macros
@@ -312,10 +313,15 @@ static void task_motion(void* pvParameters)
             switch(IMAI_FED_dequeue(label_scores))
             {
                 case IMAI_RET_SUCCESS:
+                    ipc_payload_t* payload = cm55_ipc_get_payload_ptr();
+
                     static int16_t success_flag = 1;
                     prediction_count += 1;
                     if (label_scores[1] == 1)
                     {
+                        payload->label_id = 1;
+                        strcpy(payload->label, LABELS[1]);
+
                         /* New line when LED from off to on */
                         if ((led_off - CYBSP_LED_STATE_ON) > 0)
                         {
@@ -328,12 +334,16 @@ static void task_motion(void* pvParameters)
                         get_time_from_millisec(t, timeString);
                         printf("%s %s\r\n",LABELS[1],timeString);                        
 
-                        Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
+                        // Do not control the LED:
+                        // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_ON);
                         led_off = 0;
                         led_on = tick1;
                     }
                     else
                     {
+                        payload->label_id = 0;
+                        strcpy(payload->label, LABELS[0]);
+
                         /* Only print non-label class very 10 predictions */
                         if (prediction_count>DETECTCOUNT)
                         {
@@ -347,10 +357,14 @@ static void task_motion(void* pvParameters)
                         /* Turn off LED after the LED is on for 10 secs */
                         if((tick1 - led_on) > LED_STOP_COUNT)
                         {
-                            Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
+                            // Do not control the LED:
+                            // Cy_GPIO_Write(CYBSP_USER_LED1_PORT, CYBSP_USER_LED1_PIN, CYBSP_LED_STATE_OFF);
                         }
                         led_off = 1;
                     }
+
+                    cm55_ipc_send_to_cm33();
+                    
                     break;
 
                 case IMAI_RET_TIMEDOUT:
@@ -381,8 +395,11 @@ static void task_motion(void* pvParameters)
 cy_rslt_t create_motion_sensor_task(void)
 {
     BaseType_t status;
-    printf("****************** DEEPCRAFT Ready Model: FALL DETECTION ****************** \r\n\n");
 
+    #ifdef CM55_ENABLE_STARTUP_PRINTS
+    printf("****************** DEEPCRAFT Ready Model: FALL DETECTION ****************** \r\n\n");
+    #endif
+    
     status = xTaskCreate(task_motion, "Motion Sensor Task", TASK_MOTION_SENSOR_STACK_SIZE,
             NULL, TASK_MOTION_SENSOR_PRIORITY, &motion_sensor_task_handle);
 

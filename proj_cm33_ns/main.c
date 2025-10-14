@@ -220,7 +220,7 @@ int main(void)
     printf("===============================================================\n");
 
     printf("CM33 /IOTCONNECT App Task Starting. Waiting for CM55 IPC to start...\n");
-    Cy_SysLib_Delay(20); // wait for this to print - roughtly 20 ms
+    fflush(stdout); // wait for this to print - roughtly 20 ms
 
     /* Enable CM55. CY_CORTEX_M55_APPL_ADDR must be updated if CM55 memory layout is changed. */
     Cy_SysEnableCM55(MXCM55, CY_CM55_APP_BOOT_ADDR, CM55_BOOT_WAIT_TIME_US);
