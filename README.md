@@ -4,7 +4,7 @@ This demo project is the integration of Infineon's
 [PSOC&trade; Edge MCU: DEEPCRAFT&trade; Ready Model deployment](https://github.com/Infineon/mtb-example-psoc-edge-ml-deepcraft-deploy-ready-model/tree/release-v1.2.0)
 and [Avnet /IOTCONNECT ModusToolbox&trade; SDK](https://github.com/avnet-iotconnect/avnet-iotc-mtb-sdk). 
 
-The project includes various EEPCRAFT&trade; Ready Model which are chosen at compile time by 
+The project includes various DEEPCRAFT&trade; Ready Model which are chosen at compile time by 
 selecting the model in [common.mk](common.mk)
 
 The audio models detect specific sounds:
