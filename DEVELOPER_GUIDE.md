@@ -71,8 +71,8 @@ select *Terminal -> Run Task*. Then select *Program* from the dropdown.
 An /IOTCONNECT account is required.  If you need to create an account, a free 2-month subscription is available.
 
 Please follow the 
-[Creating a New IoTConnect Account](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md)
-guide and select one of the two implementations of IoTConnect: 
+[Creating a New /IOTCONNECT Account](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md)
+guide and select one of the two implementations of /IOTCONNECT: 
 * [AWS Version](https://subscription.iotconnect.io/subscribe?cloud=aws)  
 * [Azure Version](https://subscription.iotconnect.io/subscribe?cloud=azure)  
 
@@ -90,14 +90,15 @@ guide and select one of the two implementations of IoTConnect:
 </details>
 
 
-#### /IOTCONNECTIoTConnect Device Template Setup
+#### /IOTCONNECT Device Template Setup
 
 An /IOTCONNECT *Device Template* will need to be created or imported.
 * Download the premade [device-template.json](files/device-template.json) 
 (Open the link then click the *Download Raw File* icon on the right).
 * Import the template into your /IOTCONNECT instance:  [Importing a Device Template](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) guide  
 > **Note:**  
-> For more information on [Template Management](https://docs.iotconnect.io/iotconnect/concepts/cloud-template/) please see the [IoTConnect Documentation](https://iotconnect.io) website.
+> For more information on [Template Management](https://docs.iotconnect.io/iotconnect/concepts/cloud-template/) 
+> please see the [/IOTCONNECT Documentation](https://iotconnect.io) website.
 
 #### /IOTCONNECT Device Creation and Setup
 
