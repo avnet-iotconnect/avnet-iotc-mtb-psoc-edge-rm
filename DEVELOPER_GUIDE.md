@@ -1,7 +1,7 @@
 ## Introduction
 
 This document demonstrates the steps of setting up the Infineon  PSOC™ Edge MCU boards
-for connecting to Avnet's IoTConnect Platform. Supported boards are listed in 
+for connecting to Avnet's /IOTCONNECT Platform. Supported boards are listed in 
 the [README.md](README.md).
 
 ## Prerequisites
@@ -59,7 +59,7 @@ If so, click *Yes, I trust the authors*.
 
 - Once the [Cloud Account Setup](#cloud-account-setup) below is complete,
 In the *proj_cm33_ns* project directory modify **app_config.h** per your
-IoTConnect device setup and **wifi_config.h** per your WiFi connection settings.
+/IOTCONNECT device setup and **wifi_config.h** per your WiFi connection settings.
 
 - To build the project, select *Terminal -> Run Task*. Then select *Build* from the dropdown.
 - To program the project onto the board, connect the board, 
@@ -68,7 +68,7 @@ select *Terminal -> Run Task*. Then select *Program* from the dropdown.
 
 
 ## Cloud Account Setup
-An IoTConnect account is required.  If you need to create an account, a free 2-month subscription is available.
+An /IOTCONNECT account is required.  If you need to create an account, a free 2-month subscription is available.
 
 Please follow the 
 [Creating a New IoTConnect Account](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md)
@@ -78,30 +78,30 @@ guide and select one of the two implementations of IoTConnect:
 
 * Be sure to check any SPAM folder for the temporary password.
 
-### Acquire IoTConnect Account Information
+### Acquire /IOTCONNECT Account Information
 
-* Login to IoTConnect using the corresponding link below to the version to which you registered:  
-    * [IoTConnect on AWS](https://console.iotconnect.io) 
-    * [IoTConnect on Azure](https://portal.iotconnect.io)
+* Login to /IOTCONNECT using the corresponding link below to the version to which you registered:  
+    * [/IOTCONNECT on AWS](https://console.iotconnect.io) 
+    * [/IOTCONNECT on Azure](https://portal.iotconnect.io)
 
 * The Company ID (**CPID**) and Environment (**ENV**) variables are required to be stored into the device. Take note of these values for later reference.
-<details><summary>Acquire <b>CPID</b> and <b>ENV</b> parameters from the IoTConnect Key Vault and save for later use</summary>
+<details><summary>Acquire <b>CPID</b> and <b>ENV</b> parameters from the /IOTCONNECT Key Vault and save for later use</summary>
 <img style="width:75%; height:auto" src="https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/bbdc9f363831ba607f40805244cbdfd08c887e78/assets/cpid_and_env.png"/>
 </details>
 
 
-#### IoTConnect Device Template Setup
+#### /IOTCONNECTIoTConnect Device Template Setup
 
-An IoTConnect *Device Template* will need to be created or imported.
+An /IOTCONNECT *Device Template* will need to be created or imported.
 * Download the premade [device-template.json](files/device-template.json) 
 (Open the link then click the *Download Raw File* icon on the right).
-* Import the template into your IoTConnect instance:  [Importing a Device Template](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) guide  
+* Import the template into your /IOTCONNECT instance:  [Importing a Device Template](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) guide  
 > **Note:**  
 > For more information on [Template Management](https://docs.iotconnect.io/iotconnect/concepts/cloud-template/) please see the [IoTConnect Documentation](https://iotconnect.io) website.
 
-#### IoTConnect Device Creation and Setup
+#### /IOTCONNECT Device Creation and Setup
 
-* Create a new device in the IoTConnect portal. (Follow the [Create a New Device](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/create_new_device.md) guide for a detailed walkthrough).
+* Create a new device in the /IOTCONNECT portal. (Follow the [Create a New Device](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/create_new_device.md) guide for a detailed walkthrough).
 * Choose a name for your device and enter it into the *Unique ID* field (also called Device Unique ID - DUID in this guide).
 * Enter the same DUID or descriptive name of your choosing as *Display Name* to help identify your device.
 * Select the template from the dropdown box that was just imported.
