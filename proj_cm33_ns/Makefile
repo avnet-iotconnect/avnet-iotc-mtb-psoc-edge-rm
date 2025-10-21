@@ -72,7 +72,7 @@ SOURCES+=$(wildcard ../shared/source/COMPONENT_CM33/*.c)
 INCLUDES+=../shared/include
 
 # Custom configuration of mbedtls library.
-MBEDTLSFLAGS = MBEDTLS_USER_CONFIG_FILE='"configs/mbedtls_user_config.h"'
+MBEDTLSFLAGS=MBEDTLS_USER_CONFIG_FILE='"mbedtls_user_config.h"'
 
 # Add additional defines to the build process (without a leading -D).
 DEFINES+=$(MBEDTLSFLAGS) CYBSP_WIFI_CAPABLE CY_RETARGET_IO_CONVERT_LF_TO_CRLF CY_RTOS_AWARE
@@ -92,7 +92,8 @@ DEFINES+=HTTP_DO_NOT_USE_CUSTOM_CONFIG
 # for sntp
 DEFINES+=SNTP_SERVER_DNS
 
-DEFINES+=$(MODEL_SELECTION)
+# Required when MBEDTLS_HAVE_TIME_DATE is set in mbedtls_user_config.h
+DEFINES+=MBEDTLS_PLATFORM_MS_TIME_ALT
 
 SEARCH+=../shared/retarget_io/
 

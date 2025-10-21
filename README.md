@@ -12,10 +12,10 @@ The audio models detect specific sounds:
 - Cough
 - Alarm
 
-Additional models perfrom different ML model detections with various board sensors:
+Additional models perform different ML model detections with various board sensors:
 - Radar Gestures Model - Recognizes hand gestures in front of the board.
-- Direction of Arrival (Audio) - Detects audio arrival direction via the microphone array on the board.
-- Fall Detection - Uses acelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
+- Direction of Arrival (Audio) - Not supported at the moment.
+- Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
 
 Pre-trained models that are ready for production, referred to as "Ready Models," can be found on the [Imagimob Ready Model Landing Page](https://www.imagimob.com/ready-models). These models, when deployed on a device, are intended specifically for testing purposes and come with a limited number of inferences.
 
@@ -87,23 +87,21 @@ This can be tested by placing the board in such way so that the microphone close
 - For Gesture detection model, if having issues with detections, 
 place the kit at a distance of approximately 60 cms away from you,
 for the gestures to be detected correctly. 
-See the original Infineon project github page for more details on how to perform gestures:
+See the original Infineon project GitHub page for more details on how to perform gestures:
     * Push
     * Swipe Up
     * Swipe Down
     * Swipe Left
     * Swipe Right
 
-- The Direction of Arrival (Sound) is simulated using the sample audio data and shows "South" (class="S") direction.
-
 - After a few seconds, the device will connect to /IOTCONNECT, and begin sending telemetry packets similar to the example below 
 depending on the application version and the model selected (first letter in the version prefix):
 ```
->: {"d":[{"d":{"version":"B-1.1.0","random":32,,"class_id":2,"class":"baby_cry","event_detected":true}}]}
+>: {"d":[{"d":{"version":"B-1.1.1","random":32,,"class_id":1,"class":"baby_cry","event_detected":true}}]}
 ```
 - The following commands can be sent to the device using the /IOTCONNECT Web UI:
 
-    | Command                  | Argument Type     | Description                                                        |
-    |:-------------------------|-------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | `board-user-led`         | String (on/off)   | Turn the board LED on or off                                                                                                                                                |
-    | `set-reporting-interval` | Number (eg. 2000) | Set telemetry reporting interval in milliseconds.  By default, the application will report every 2000ms                                     |
+    | Command                  | Argument Type     | Description                                                                                             |
+    |:-------------------------|-------------------|:--------------------------------------------------------------------------------------------------------|
+    | `board-user-led`         | String (on/off)   | Turn the board LED on or off (Red LED on the EVK, Green on the AI)                                      |
+    | `set-reporting-interval` | Number (eg. 2000) | Set telemetry reporting interval in milliseconds.  By default, the application will report every 2000ms |

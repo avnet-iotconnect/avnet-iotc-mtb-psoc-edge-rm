@@ -17,12 +17,14 @@
 #include "wifi_app.h"
 
 #include "iotconnect.h"
+#include "iotc_mtb_time.h"
 
 #include "app_config.h"
 
 
+/////////////////////////////////////////////////////////////////////////////
 
-#define APP_VERSION_BASE "1.1.0"
+#define APP_VERSION_BASE "1.1.1"
 
 // Defined in common.mk then dereference in this Makefile with DEFINES+=
 #if defined(COUGH_MODEL)
@@ -63,7 +65,7 @@ static void on_connection_status(IotConnectConnectionStatus status) {
 
 static void on_ota(IotclC2dEventData data) {
     const char *ota_host = iotcl_c2d_get_ota_url_hostname(data, 0);
-    if (ota_host == NULL){
+    if (ota_host == NULL) {
         printf("OTA host is invalid.\n");
         return;
     }
@@ -184,7 +186,7 @@ static cy_rslt_t publish_telemetry(void) {
 
 void app_task(void *pvParameters) {
     (void) pvParameters;
-    
+
     // DO NOT print anything before we receive a message to avoice garbled output
 
     // we want to wait for CM33 to start receiving messages to prevent halts and errors below.
@@ -238,6 +240,8 @@ void app_task(void *pvParameters) {
 
     // This will not return if it fails
     wifi_app_connect();
+
+    iotc_mtb_time_obtain(IOTCONNECT_SNTP_SERVER);
 
     cy_rslt_t ret = iotconnect_sdk_init(&config);
     if (CY_RSLT_SUCCESS != ret) {

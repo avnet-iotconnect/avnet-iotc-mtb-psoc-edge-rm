@@ -30,9 +30,9 @@
 #define MBEDTLS_USER_CONFIG_HEADER
 
 /**
- * Compiling Mbed TLS for Cortex-M0/0+/1/M23 cores with optimization enabled and on ARMC6 compiler results in errors. 
+ * Compiling Mbed TLS for Cortex-M0/0+/1/M23 cores with optimization enabled and on ARMC6 compiler results in errors.
  * These cores lack the required full Thumb-2 support, causing the inline assembly to require more registers than available.
- * The workaround is to use 'MULADDC_CANNOT_USE_R7' compilation flag, or without optimization flag, 
+ * The workaround is to use 'MULADDC_CANNOT_USE_R7' compilation flag, or without optimization flag,
  * but note that this will compile without the assmebly optimization.
  *
  * To read more about this issue, refer to https://github.com/ARMmbed/mbed-os/pull/14529/commits/86e7bc559b0d1a055bf84ea9249763d2349fb6e8
@@ -68,7 +68,7 @@
  * mbedtls_platform_gmtime_r() at compile-time by using the macro
  * MBEDTLS_PLATFORM_GMTIME_R_ALT.
  */
-#undef MBEDTLS_HAVE_TIME_DATE
+// #undef MBEDTLS_HAVE_TIME_DATE
 
 
 /**
@@ -94,13 +94,13 @@
  * Uncomment a macro to enable alternate implementation of specific base
  * platform function
  */
+//#define MBEDTLS_PLATFORM_EXIT_ALT
 #define MBEDTLS_PLATFORM_TIME_ALT
-/* #define MBEDTLS_PLATFORM_EXIT_ALT
-#define MBEDTLS_PLATFORM_FPRINTF_ALT
-#define MBEDTLS_PLATFORM_PRINTF_ALT
-#define MBEDTLS_PLATFORM_SNPRINTF_ALT
-#define MBEDTLS_PLATFORM_NV_SEED_ALT
-#define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT */
+//#define MBEDTLS_PLATFORM_FPRINTF_ALT
+//#define MBEDTLS_PLATFORM_PRINTF_ALT
+//#define MBEDTLS_PLATFORM_SNPRINTF_ALT
+//#define MBEDTLS_PLATFORM_NV_SEED_ALT
+//#define MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT
 
 /**
  * \def MBEDTLS_ENTROPY_HARDWARE_ALT
@@ -124,7 +124,7 @@
  */
 #undef MBEDTLS_ECP_DP_SECP192R1_ENABLED
 #undef MBEDTLS_ECP_DP_SECP224R1_ENABLED
-/* #define MBEDTLS_ECP_DP_SECP256R1_ENABLED */
+//#define MBEDTLS_ECP_DP_SECP256R1_ENABLED
 #undef MBEDTLS_ECP_DP_SECP384R1_ENABLED
 #undef MBEDTLS_ECP_DP_SECP521R1_ENABLED
 #undef MBEDTLS_ECP_DP_SECP192K1_ENABLED
@@ -133,7 +133,7 @@
 #undef MBEDTLS_ECP_DP_BP256R1_ENABLED
 #undef MBEDTLS_ECP_DP_BP384R1_ENABLED
 #undef MBEDTLS_ECP_DP_BP512R1_ENABLED
-/* #undef MBEDTLS_ECP_DP_CURVE25519_ENABLED */
+#undef MBEDTLS_ECP_DP_CURVE25519_ENABLED
 #undef MBEDTLS_ECP_DP_CURVE448_ENABLED
 
 /**
@@ -299,7 +299,7 @@
  *
  * Uncomment this macro to enable support for SSLv2 Client Hello messages.
  */
-/* #define MBEDTLS_SSL_SRV_SUPPORT_SSLV2_CLIENT_HELLO */
+//#define MBEDTLS_SSL_SRV_SUPPORT_SSLV2_CLIENT_HELLO
 
 /**
  * \def MBEDTLS_SSL_PROTO_TLS1
@@ -940,7 +940,7 @@
  */
 #define MBEDTLS_VERBOSE 0
 
-/** 
+/**
  * \def Comment out below line in addition to setting MBEDTLS_VERBOSE value to get the MBEDTLS logs
  *
  * MBEDTLS_DEBUG_C flag is by default undefined to save code space (~60Kb). For low memory platform, when MBEDTLS_DEBUG_C is enabled
@@ -997,6 +997,19 @@
  * SECP224R1, SECP256R1, SECP384R1 and SECP521R1 curves. If any
  * other curve is enabled, need to disable the MBEDTLS_ECP_ALT.
  */
+
+/**
+ * Nik: Looking at the comments, it would appear that SECP256R1 should be hardware accelerated,
+ * but when we try to hook into it, the board freezes when printing the mbedtls generated certificates
+ * we must disable it for now and research further.
+#ifdef MBEDTLS_ECP_DP_SECP256R1_ENABLED
+#undef MBEDTLS_ECP_ALT
+#undef MBEDTLS_ECDH_GEN_PUBLIC_ALT
+#undef MBEDTLS_ECDSA_SIGN_ALT
+#undef MBEDTLS_ECDSA_VERIFY_ALT
+#endif
+ */
+
 #ifdef MBEDTLS_ECP_DP_SECP192K1_ENABLED
 #undef MBEDTLS_ECP_ALT
 #undef MBEDTLS_ECDH_GEN_PUBLIC_ALT
