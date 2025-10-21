@@ -38,4 +38,7 @@ In that case, you would need to delete and re-create your device in IoTConnect.
 #define IOTCONNECT_DEVICE_CERT ""
 #define IOTCONNECT_DEVICE_KEY ""
 
+// you can choose to use your own NTP server to obtain network time, or simply time.google.com for better stability
+#define IOTCONNECT_SNTP_SERVER "pool.ntp.org"
+
 #endif /* APP_CONFIG_H */
