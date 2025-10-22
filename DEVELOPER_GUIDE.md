@@ -36,9 +36,9 @@ Firmware logs will be available on that COM port.
 > if you are contributing to this project.
 
 - Download [ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/). Install the ***ModusToolbox&trade; Setup*** software. The software may require you to log into your Infineon account. In ***ModusToolbox&trade; Setup*** software, download & install the items below:
-  - *ModusToolbox&trade; Tools Package* 3.6.
-  - *ModusToolbox&trade; Edge Protect Security Suite* 1.6.0.
-  - *ModusToolbox&trade; Programming Tools* 1.6.0.
+  - ModusToolbox&trade; Tools Package 3.6.
+  - ModusToolbox&trade; Edge Protect Security Suite 1.6.0.
+  - ModusToolbox&trade; Programming Tools 1.6.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
   - Microsoft Visual Studio Code 1.105.0 or newer. [(VS Code for ModusToolbox&trade; guide)](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2)
 
