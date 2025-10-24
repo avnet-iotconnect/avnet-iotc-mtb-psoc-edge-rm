@@ -46,9 +46,9 @@ Firmware logs will be available on that COM port.
   - Arm GCC Toolchain (GCC) 14.2.1.
   - Microsoft Visual Studio Code.
 
-- Install and set up VSCode per [VS Code for ModusToolbox&trade; guide](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf).
-At the time of writing this guide, it is only need to follow the first few sections and 
-install the required VSCode Plugins and the J-Link Software.
+- Install and set up VS Code per [VS Code for ModusToolbox&trade; guide](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf).
+At the time of writing this guide, it is only required to follow the first few sections
+that explain how to install VS Code itself, the required VS Code Plugins and the J-Link Software.
 - Launch ModusToolbox&trade; Dashboard. Select Target IDE `Microsoft Visual Studio` 
 from the dropdown on top-right and then click *Launch Project Creator*.
 - Select one of the supported boards from [README.md](README.md) and click *Next*.
@@ -58,9 +58,8 @@ It is preferred to use a short path due to Windows OS file path limits.
 - Checkmark this repo's application by browsing Template Applications or searching for this application name. 
 We suggest searching for "Avnet" first to reduce the list.
 - It is recommended to override the New Application Name value to a shorter name.
-- Click *Create*.
-- Close the Project Creator when the project is created successfully.
-- Open VS code, and Select *File -> Open Workspace from File*, navigate to the location of the application that was just
+- Click *Create* and close the Project Creator when the project is created successfully.
+- Open VS Code, and Select *File -> Open Workspace from File*, navigate to the location of the application that was just
 created, select the workspace file, and click *Open*.
 - Depending on your settings in VS Code and VS Code version, you may see a message about trusting the authors. 
 If so, click *Yes, I trust the authors*.
@@ -130,7 +129,7 @@ download the certificate by clicking the download icon on the top right
 * Set your IOTCONNECT_CONNECTION_TYPE in the same file, per comments.
 * Unzip the previously downloaded certificates zip into a directory.
 Open the device certificate and private key files in an editor.
-Use the VSCode Copilot AI Agent to set up the certificate and private key for you with the following prompt:
+Use the VS Code Copilot AI Agent to set up the certificate and private key for you with the following prompt:
 > ```
 > Set IOTCONNECT_DEVICE_CERT and IOTCONNECT_DEVICE_KEY in app_config.h.
 > Use the instructions in the file and these PEM contents:
