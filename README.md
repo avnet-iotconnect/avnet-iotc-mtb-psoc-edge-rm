@@ -60,7 +60,7 @@ Ensure the following jumper and pin configuration on board.
 To setup the project, please refer to the 
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
 
-- To select the model, update the `MODEL_SELECTION` variable in the *Makefile* of proj_cm55 project.
+- To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
 
 | Model name                  | Macro                       |
 |:----------------------------|:----------------------------|
