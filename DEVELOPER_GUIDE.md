@@ -12,6 +12,10 @@ the [README.md](README.md).
 * A registered [myInfineon Account](https://www.infineon.com/sec/login)
 
 ## Hardware Setup
+* See the kit user guide to ensure that the board is configured correctly.
+* If using the EVK board, ensure the following jumper and pin configuration on board.
+  * BOOT SW must be in the HIGH/ON position
+  * J20 and J21 must be in the tristate/not connected (NC) position (these should be default)
 * Identify the debug USB port for your board from the board's user manual.
 * Connect the board's debug port to a USB port on your PC. A new USB device should be detected.
 Firmware logs will be available on that COM port.
@@ -40,21 +44,24 @@ Firmware logs will be available on that COM port.
   - ModusToolbox&trade; Edge Protect Security Suite 1.6.0.
   - ModusToolbox&trade; Programming Tools 1.6.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
-  - Microsoft Visual Studio Code 1.105.0 or newer. [(VS Code for ModusToolbox&trade; guide)](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2)
+  - Microsoft Visual Studio Code 1.105.0 or newer.
 
+- Install and set up VSCode per [VS Code for ModusToolbox&trade; guide](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf?fileId=8ac78c8c92416ca50192787be52923b2)
+At the time of writing this guide, it is only need to install the required VSCode Plugins and J-Link Software.
 - Launch ModusToolbox&trade; Dashboard. Select Target IDE `Microsoft Visual Studio` 
 from the dropdown on top-right and then click *Launch Project Creator*.
 - Select one of the supported boards from [README.md](README.md) and click *Next*.
 - For the Application(s) Root Path, specify or browse to a directory where the application will be created.
 It is preferred to use a short path due to Windows OS file path limits.
 - Ensure that the Target IDE is *Microsoft Visual Studio Code*.
-- Checkmark this repo's application by browsing Template Applications or searching for this application name.
+- Checkmark this repo's application by browsing Template Applications or searching for this application name. 
+We suggest searching for "Avnet" first to reduce the list.
 - It is recommended to override the New Application Name value to a shorter name.
 - Click *Create*.
 - Close the Project Creator when the project is created successfully.
 - Open VS code, and Select *File -> Open Workspace from File*, navigate to the location of the application that was just
 created, select the workspace file, and click *Open*.
-- Depending on your settings in VS Code, you may see a message about trusting the authors. 
+- Depending on your settings in VS Code and VS Code version, you may see a message about trusting the authors. 
 If so, click *Yes, I trust the authors*.
 
 - Once the [Cloud Account Setup](#cloud-account-setup) below is complete,
@@ -68,15 +75,22 @@ select *Terminal -> Run Task*. Then select *Program* from the dropdown.
 
 
 ## Cloud Account Setup
-An /IOTCONNECT account is required.  If you need to create an account, a free 2-month subscription is available.
 
-Please follow the 
-[Creating a New /IOTCONNECT Account](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md)
-guide and select one of the two implementations of /IOTCONNECT: 
-* [AWS Version](https://subscription.iotconnect.io/subscribe?cloud=aws)  
-* [Azure Version](https://subscription.iotconnect.io/subscribe?cloud=azure)  
+### Create an /IOTCONNECT Account
+An /IOTCONNECT account with an AWS backend is required.  If you need to create an account, a free trial subscription is available.
+The free subscription may be obtained directly from [iotconnect.io](https://iotconnect.io) or through the AWS Marketplace.
 
-* Be sure to check any SPAM folder for the temporary password.
+* Option #1 **(Recommended)**   
+/IOTCONNECT via [AWS Marketplace](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/iotconnect_aws_marketplace.md) - 60 day trial; AWS account creation required  
+
+
+* Option #2  
+/IOTCONNECT via [iotconnect.io](https://subscription.iotconnect.io/subscribe?cloud=aws) - 30 day trial; no credit card required
+
+> [!NOTE]
+> Be sure to check any SPAM folder for the temporary password after registering.
+
+Login to the platform by navigating to [console.iotconnect.io](https://console.iotconnect.io)
 
 ### Acquire /IOTCONNECT Account Information
 
@@ -112,28 +126,14 @@ An /IOTCONNECT *Device Template* will need to be created or imported.
 download the certificate by clicking the download icon on the top right
 ![download-cert.png](media/download-cert.png).
 * Provide values for DUID, CPID and ENV from the above steps into the **proj_cm33_ns/app_config.h** file.
-* You will need to open the device certificate and private key files and 
-provide them in **proj_cm33_ns/app_config.h** in the format specified as a C string #define like so:
-  ```
-  #define IOTCONNECT_DEVICE_CERT \
-  "-----BEGIN CERTIFICATE-----\n" \
-  "MIICwTCCAakCFFUmScR+Y+XTcu0YKMQcFDXSENLKMA0GCSqGSIb3DQEBCwUAMB0x\n" \
-  "GzAZBgNVBAMMEmF2dGRzLWlvdGNlZjJmNDAyMjAeFw0yNDA1MDIxOTEyMzRaFw0y\n" \
-  "NTA1MDIxOTEyMzRaMB0xGzAZBgNVBAMMEmF2dGRzLWlvdGNlZjJmNDAyMjCCASIw\n" \
-  "DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANA1q0MJwVLGn2uz7O/I2Wo80vnf\n" \
-  "ho+U/LW7bHW3JkzrkWIsc2cnT9fDhbSHmUkNlj5yUl+DtsM5LlAV/QO+EHd1xubU\n" \
-  "fmtXmk+/vB5g4OhGAI                               CvxlEqm2jW239sU\n" \
-  "po153s2XPfO0A0NN8L                               PPTVVA/SlwmuKOp\n" \
-  "YdtfTzhdBNiPtnt6xP      THIS IS AN EXAMPLE       mP25wfeCeNh1e64\n" \
-  "KWMVsY1wBsPLsC7KmC                               aIaEJsTRiECAwEA\n" \
-  "ATANBgkqhkiG9w0BAQ                               quxEn1IkGjmNF2I\n" \
-  "m/3+BM/2qPTxZVnfZfgKr3xD3hedymY0JRiKHKZGVWQSClobrbL5p6DraYBwWSFe\n" \
-  "h/lKhhBl0quu1vqXPhbMQaVcrBh4NGU8uDi3kezytqVhewR7wru/V3pdwvSer+Am\n" \
-  "qr5Sg/2HGybLHGsYhiRqU6bEYhPUzmQJs5FBR9HPd1xsME0qP6MW9FnR7S06G+z4\n" \
-  "UkWMseIlcxY6mGViLZGS362rAOAFQE9QYA9qdWyM+AIvjZjlQCbkTOiaEd6GXQIU\n" \
-  "khPBBRXBKbDpQ02LgX6tsJUEbGbnPC94LfwnkTuVx/CFKWZfmg==\n" \
-  "-----END CERTIFICATE-----"
-  ```
-* The same format needs to be used for the private key as `#define IOTCONNECT_DEVICE_KEY`
+* Set your IOTCONNECT_CONNECTION_TYPE in the same file, per comments.
+* Unzip the previously downloaded certificates zip into a directory.
+Open the device certificate and private key files in an editor.
+Use the VSCode Copilot AI Agent to set up the certificate and private key for you with the following prompt:
+> ```
+> Set IOTCONNECT_DEVICE_CERT and IOTCONNECT_DEVICE_KEY in app_config.h.
+> Use the instructions in the file and these PEM contents:
+> (copy and paste the cert and private key as text here)
+> ```
 
 At this point, the application is set up with /IOTCONNECT credentials.
