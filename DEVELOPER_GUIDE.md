@@ -104,7 +104,7 @@ Login to the platform by navigating to [console.iotconnect.io](https://console.i
 </details>
 
 
-#### /IOTCONNECT Device Template Setup
+### /IOTCONNECT Device Template Setup
 
 An /IOTCONNECT *Device Template* will need to be created or imported.
 * Download the premade [device-template.json](files/device-template.json) 
@@ -114,7 +114,7 @@ An /IOTCONNECT *Device Template* will need to be created or imported.
 > For more information on [Template Management](https://docs.iotconnect.io/iotconnect/concepts/cloud-template/) 
 > please see the [/IOTCONNECT Documentation](https://iotconnect.io) website.
 
-#### /IOTCONNECT Device Creation and Setup
+### /IOTCONNECT Device Creation and Setup
 
 * Create a new device in the /IOTCONNECT portal. (Follow the [Create a New Device](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/create_new_device.md) guide for a detailed walkthrough).
 * Choose a name for your device and enter it into the *Unique ID* field (also called Device Unique ID - DUID in this guide).
