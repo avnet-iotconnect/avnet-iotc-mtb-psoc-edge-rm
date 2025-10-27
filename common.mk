@@ -74,6 +74,6 @@ COMBINE_SIGN_JSON?=configs/boot_with_extended_boot.json
 # FALLDETECTION_MODEL
 # GESTURE_MODEL (For KIT_PSE84_AI only)
 
-MODEL_SELECTION = GESTURE_MODEL
+MODEL_SELECTION = BABYCRY_MODEL
 
 include ../common_app.mk

@@ -13,7 +13,7 @@ The audio models detect specific sounds:
 - Alarm
 
 Additional models perform different ML model detections with various board sensors:
-- Radar Gestures Model (default model in the Makefile) - Recognizes hand gestures in front of the board.
+- Radar Gestures Model - Recognizes hand gestures in front of the board.
 - Direction of Arrival (Audio) - Not supported at the moment.
 - Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
 
@@ -54,28 +54,18 @@ To set up the project, please refer to the
 
 - To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
 
-| Model name                  | Macro                      |
-|:----------------------------|:---------------------------|
-| Cough detection             | `COUGH_MODEL`              |
-| Alarm detection             | `ALARM_MODEL`              |
-| Baby cry detection          | `BABYCRY_MODEL`            |
-| Gesture detection (default) | `GESTURE_MODEL`  |
-| Directio of Arrival (Sound) | `DIRECTIONOFARRIVAL_MODEL` |
-| Fall detection              | `FALLDETECTION_MODEL`      |
+| Model name                  | Macro                       |
+|:----------------------------|:----------------------------|
+| Cough detection             | `COUGH_MODEL`               |
+| Alarm detection             | `ALARM_MODEL`               |
+| Baby cry detection          | `BABYCRY_MODEL`             |
+| Gesture detection           | `GESTURE_MODEL`             |
+| Directio of Arrival (Sound) | `DIRECTIONOFARRIVAL_MODEL`  |
+| Fall detection              | `FALLDETECTION_MODEL`       |
 
 > **Note:** Currently, gesture detection model is supported only for the PSOC&trade; Edge AI kit.
 
 ## Running The Demo
-
-- For Gesture detection model, if having issues with detections, 
-place the kit at a distance of approximately 60 cms away from you,
-for the gestures to be detected correctly. 
-See the original Infineon project GitHub page for more details on how to perform gestures:
-    * Push
-    * Swipe Up
-    * Swipe Down
-    * Swipe Left
-    * Swipe Right
 
 - For audio sound recognition models, once the board connects to /IOTCONNECT, 
 it will start processing microphone input and attempt to detect the corresponding sound. 
@@ -87,10 +77,21 @@ This can be tested by placing the board in such way so that the microphone close
   * [Cough](https://www.youtube.com/watch?v=Qp09X74kjBc)
   * [Alarm](https://www.youtube.com/watch?v=hFIJaB6kVzk)
 
+
+- For Gesture detection model, if having issues with detections, 
+place the kit at a distance of approximately 60 cms away from you,
+for the gestures to be detected correctly. 
+See the original Infineon project GitHub page for more details on how to perform gestures:
+    * Push
+    * Swipe Up
+    * Swipe Down
+    * Swipe Left
+    * Swipe Right
+
 - After a few seconds, the device will connect to /IOTCONNECT, and begin sending telemetry packets similar to the example below 
 depending on the application version and the model selected (first letter in the version prefix):
 ```
->: {"d":[{"d":{"version":"G-1.1.1","random":77,"class_id":2,"class":"SwipeDown","event_detected":true}}]}
+>: {"d":[{"d":{"version":"B-1.1.1","random":32,,"class_id":1,"class":"baby_cry","event_detected":true}}]}
 ```
 - The following commands can be sent to the device using the /IOTCONNECT Web UI:
 
