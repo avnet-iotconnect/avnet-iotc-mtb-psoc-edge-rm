@@ -38,7 +38,7 @@
 #elif defined(FALLDETECTION_MODEL)
 #define APP_VERSION ("F-" APP_VERSION_BASE)
 #elif defined(GESTURE_MODEL)
-#define APP_VERSION ("B-" APP_VERSION_BASE)
+#define APP_VERSION ("G-" APP_VERSION_BASE)
 #else
 #define APP_VERSION ("?-" APP_VERSION_BASE)
 #endif

@@ -92,6 +92,9 @@ DEFINES+=HTTP_DO_NOT_USE_CUSTOM_CONFIG
 # for sntp
 DEFINES+=SNTP_SERVER_DNS
 
+# To be able to detect the model in the app:
+DEFINES+=$(MODEL_SELECTION)
+
 # Required when MBEDTLS_HAVE_TIME_DATE is set in mbedtls_user_config.h
 DEFINES+=MBEDTLS_PLATFORM_MS_TIME_ALT
 
