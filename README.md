@@ -28,7 +28,7 @@ This application can receive Cloud-To-Device commands as well and control one of
 
 ## Requirements
 
-- [ModusToolbox&trade;](https://www.infineon.com/modustoolbox) v3.6 or later (tested with v3.6)
+- [ModusToolbox&trade;](https://www.infineon.com/modustoolbox) with MTB Tools v3.6 or later (tested with v3.6)
 - Board support package (BSP) minimum required version: 1.0.0
 - Programming language: C
 - Associated parts: All [PSOC&trade; Edge MCU](https://www.infineon.com/products/microcontroller/32-bit-psoc-arm-cortex/32-bit-psoc-edge-arm) parts
