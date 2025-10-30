@@ -47,9 +47,13 @@ This application can receive Cloud-To-Device commands as well and control one of
 - [PSOC&trade; Edge E84 Evaluation Kit](https://www.infineon.com/KIT_PSE84_EVAL) (`KIT_PSE84_EVAL_EPC2`) -
 [Purchase Link](https://www.newark.com/infineon/kitpse84evaltobo1/eval-kit-32bit-arm-cortex-m55f/dp/49AM4460)
 
+
 ## Set Up The Project
 
-To set up the project, please refer to the 
+To get quickly started with the DEEPCRAFT Gesture Ready Model on the PSOC Edge E84 AI Kit, reference the 
+[Getting Started Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-ai).
+
+For general instructions on how to set up and run this project, refer to the 
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
 
 - To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
