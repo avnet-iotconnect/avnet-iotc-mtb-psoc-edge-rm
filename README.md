@@ -50,8 +50,9 @@ This application can receive Cloud-To-Device commands as well and control one of
 
 ## Set Up The Project
 
-To get quickly started with the DEEPCRAFT Gesture Ready Model on the PSOC Edge E84 AI Kit, reference the 
-[Getting Started Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-ai).
+To get quickly started with the DEEPCRAFT Ready Models on the PSOC Edge Kits, see the guides:  
+[PSoC Edge E84 AI Getting Started Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-ai)  
+[PSoC Edge E84 Eval Kit Getting Started Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-eval)  
 
 For general instructions on how to set up and run this project, refer to the 
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
