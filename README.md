@@ -13,9 +13,10 @@ The audio models detect specific sounds:
 - Alarm
 
 Additional models perform different ML model detections with various board sensors:
-- Radar Gestures Model - Recognizes hand gestures in front of the board.
-- Direction of Arrival (Audio) - Not supported at the moment.
-- Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
+* Radar Gestures Model - Recognizes hand gestures in front of the board.  
+  [Getting Started Workshop with the PSOC Edge E84 AI Kit](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-ai)
+* Direction of Arrival (Audio) - Not supported at the moment.
+* Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
 
 Pre-trained models that are ready for production, referred to as "Ready Models," can be found on the [Imagimob Ready Model Landing Page](https://www.imagimob.com/ready-models). These models, when deployed on a device, are intended specifically for testing purposes and come with a limited number of inferences.
 
