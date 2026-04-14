@@ -41,11 +41,11 @@ Firmware logs will be available on that COM port.
 
 - Download [ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/). Install the ***ModusToolbox&trade; Setup*** software. The software may require you to log into your Infineon account. In ***ModusToolbox&trade; Setup*** software, download & install the items below:
   - ModusToolbox&trade; Tools Package 3.7.
-  - ModusToolbox&trade; Edge Protect Security Suite 1.6.0.
-  - ModusToolbox&trade; Programming Tools 1.6.0.
+  - ModusToolbox&trade; Edge Protect Security Suite 1.6.1.
+  - ModusToolbox&trade; Programming Tools 1.8.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
   - Microsoft Visual Studio Code.
-
+ 
 - Install and set up VS Code per [VS Code for ModusToolbox&trade; guide](https://www.infineon.com/assets/row/public/documents/30/44/infineon-visual-studio-code-user-guide-usermanual-en.pdf).
 At the time of writing this guide, it is only required to follow the first few sections
 that explain how to install VS Code itself, the required VS Code Plugins and the J-Link Software.
@@ -64,17 +64,20 @@ created, select the workspace file, and click *Open*.
 - Depending on your settings in VS Code and VS Code version, you may see a message about trusting the authors. 
 If so, click *Yes, I trust the authors*.
 
-- Once the [Cloud Account Setup](#cloud-account-setup) below is complete,
-In the *proj_cm33_ns* project directory modify **app_config.h** per your
-/IOTCONNECT device setup and **wifi_config.h** per your WiFi connection settings.
-
-- To build the project, select *Terminal -> Run Task*. Then select *Build* from the dropdown.
+- Build the project, select *Terminal -> Run Task*. Then select *Build* from the dropdown.
 - To program the project onto the board, connect the board, 
 select *Terminal -> Run Task*. Then select *Program* from the dropdown.
 - If you wish to debug the project, select *Run > Start Debugging* instead.
+- (Optional) While we recommend using the runtime device configuration, please note that the configuration
+can be hard-coded in the app_config.h and wifi_config.h files. The device can be created first in /IOTCONNECCT and the 
+certificate and private key can be downloaded and set in the app_config.h.
+- Open your terminal emulator and monitor the device startup messages. Note the following similar to this one:
 
+```
+Generated device unique ID (DUID) is: psoc-edge-rm-11012233
+```
 
-## Cloud Account Setup
+Record this DUID to use it in the later steps. 
 
 ### Create an /IOTCONNECT Account
 An /IOTCONNECT account with an AWS backend is required.  If you need to create an account, a free trial subscription is available.
@@ -117,23 +120,56 @@ An /IOTCONNECT *Device Template* will need to be created or imported.
 ### /IOTCONNECT Device Creation and Setup
 
 * Create a new device in the /IOTCONNECT portal. (Follow the [Create a New Device](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/create_new_device.md) guide for a detailed walkthrough).
-* Choose a name for your device and enter it into the *Unique ID* field (also called Device Unique ID - DUID in this guide).
+* Enter the *DUID* displayed on the device terminal into the *Unique ID* field (also called Device Unique ID - DUID in this guide).
 * Enter the same DUID or descriptive name of your choosing as *Display Name* to help identify your device.
 * Select the template from the dropdown box that was just imported.
-* Ensure "Auto-generated" is selected under *Device certificate*.
-* Click **Save & View**.
-* In the *Info* panel, click the *Connection Info* hyperink on top right and 
-download the certificate by clicking the download icon on the top right
-![download-cert.png](media/download-cert.png).
-* Provide values for DUID, CPID and ENV from the above steps into the **proj_cm33_ns/app_config.h** file.
-* Set your IOTCONNECT_CONNECTION_TYPE in the same file, per comments.
-* Unzip the previously downloaded certificates zip into a directory.
-Open the device certificate and private key files in an editor.
-Use the VS Code Copilot AI Agent to set up the certificate and private key for you with the following prompt:
-> ```
-> Set IOTCONNECT_DEVICE_CERT and IOTCONNECT_DEVICE_KEY in app_config.h.
-> Use the instructions in the file and these PEM contents:
-> (copy and paste the cert and private key as text here)
-> ```
+* Ensure "Use my certificate" is selected under *Device certificate*.
 
-At this point, the application is set up with /IOTCONNECT credentials.
+Return to the device terminal and enter your account and Wi-Fi credentials, similar to this:
+```
+Please enter your device configuration
+Platform (aws/az): 
+>Platform: aws
+CPID: 
+>mycpid
+Environment: 
+>myenv
+WiFi SSID: 
+>myssid
+WiFi Password: 
+>mypass
+```
+
+> [!NOTE]
+> Enabling **local echo** in your terminal settings
+> may help when entering the information but may conflict with the output as well,
+> depending on which terminal emulator is used.
+
+You should see the device write the configured values and reset. On subsequent boot the device configration and
+the certificate will be displayed:
+```
+Current Settings:
+Platform: AWS
+DUID: psoc-edge-rm-11012233
+CPID: mycpid
+ENV: myenv
+WiFi SSID: myssid
+Device certificate:
+-----BEGIN CERTIFICATE-----
+MIIBfzCCASagAwIBAgIIftSAAzQzATMwCgYIKoZIzj0EAwIwOTEaMBgGA1UEAwwR
+SW9UQ29ubmVjdERldkNlcnQxDjAMBgNVBAoMBUF2bmV0MQswCQYDVQQGEwJVUzAg
+Fw0yNDAxMDEwM                                   MBgGA1UEAwwRSW9U
+Q29ubmVjdERld                                   VQQGEwJVUzBZMBMG
+ByqGSM49AgEGC         SAMPLE CERTIFICAT         eklK5tmV7N95xrGm
+who39wX16VoYa                                   3u2jFjAUMBIGA1Ud
+EwEB/wQIMAYBA                                   GVNVm0q+ztJmUi6C
+jx8ZHQgzNRiywiDxV2LEgGgCIFJuyFsMp3VfOqp0QoRopL5S9XTaPwMDK16ouffu
+UQRV
+-----END CERTIFICATE-----
+```
+* This information will always be displayed on boot-up. You will also have an option to enter "y" 
+at the *Do you wish to configure the device?* prompt to re-configure the values.
+* Return to the /IOTCCONNECT browser window and copy the device certificate including the BEGIN and END lines.
+* Click **Save & View**.
+
+* At this point, the application is set up with /IOTCONNECT credentials and reseting the board should connect it to /IOTCONNECT.

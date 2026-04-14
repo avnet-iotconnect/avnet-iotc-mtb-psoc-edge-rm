@@ -252,8 +252,7 @@ void deinterleave_antennas(uint16_t * buffer_ptr)
 void radar_task(void *pvParameters)
 {
     (void)pvParameters;
-    cy_rslt_t result = CY_RSLT_SUCCESS;
-
+    
     if (radar_init() != 0)
     {
         CY_ASSERT(0);

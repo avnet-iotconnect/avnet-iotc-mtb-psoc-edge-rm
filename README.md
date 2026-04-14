@@ -47,10 +47,16 @@ This application can receive Cloud-To-Device commands as well and control one of
 - [PSOC&trade; Edge E84 Evaluation Kit](https://www.infineon.com/KIT_PSE84_EVAL) (`KIT_PSE84_EVAL_EPC2`) -
 [Purchase Link](https://www.newark.com/infineon/kitpse84evaltobo1/eval-kit-32bit-arm-cortex-m55f/dp/49AM4460)
 
+
 ## Set Up The Project
 
 To set up the project, please refer to the 
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
+
+To quickly evaluate the project without development tools, you can download the pre-built Gestures binary package at
+[avnet-iotc-mtb-psoc-edge-rm-gestures-v2.0.0.hex.zip](https://downloads.iotconnect.io/partners/infineon/demos/avnet-iotc-mtb-psoc-edge-rm-gestures-v2.0.0.hex.zip).
+You can skip the VSCode and compiler setup in the Developer Guide and flash the extracted hex file with the MTB Programmer software.
+When flashing, ensure to select the "External Memory" option.
 
 - To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
 
