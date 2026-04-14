@@ -40,7 +40,7 @@ Firmware logs will be available on that COM port.
 > if you are contributing to this project.
 
 - Download [ModusToolbox&trade; software](https://www.infineon.com/cms/en/design-support/tools/sdk/modustoolbox-software/). Install the ***ModusToolbox&trade; Setup*** software. The software may require you to log into your Infineon account. In ***ModusToolbox&trade; Setup*** software, download & install the items below:
-  - ModusToolbox&trade; Tools Package 3.6.
+  - ModusToolbox&trade; Tools Package 3.7.
   - ModusToolbox&trade; Edge Protect Security Suite 1.6.0.
   - ModusToolbox&trade; Programming Tools 1.6.0.
   - Arm GCC Toolchain (GCC) 14.2.1.
@@ -76,7 +76,7 @@ select *Terminal -> Run Task*. Then select *Program* from the dropdown.
 
 ## Cloud Account Setup
 
-### Create /IOTCONNECT Account
+### Create an /IOTCONNECT Account
 An /IOTCONNECT account with an AWS backend is required.  If you need to create an account, a free trial subscription is available.
 The free subscription may be obtained directly from [iotconnect.io](https://iotconnect.io) or through the AWS Marketplace.
 
@@ -94,10 +94,15 @@ Login to the platform by navigating to [console.iotconnect.io](https://console.i
 
 ### Acquire /IOTCONNECT Account Information
 
+* Login to /IOTCONNECT using the corresponding link below to the version to which you registered:  
+    * [/IOTCONNECT on AWS](https://console.iotconnect.io) 
+    * [/IOTCONNECT on Azure](https://portal.iotconnect.io)
+
 * The Company ID (**CPID**) and Environment (**ENV**) variables are required to be stored into the device. Take note of these values for later reference.
 <details><summary>Acquire <b>CPID</b> and <b>ENV</b> parameters from the /IOTCONNECT Key Vault and save for later use</summary>
 <img style="width:75%; height:auto" src="https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/bbdc9f363831ba607f40805244cbdfd08c887e78/assets/cpid_and_env.png"/>
 </details>
+
 
 ### /IOTCONNECT Device Template Setup
 

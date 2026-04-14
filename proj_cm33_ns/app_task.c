@@ -17,14 +17,16 @@
 #include "wifi_app.h"
 
 #include "iotconnect.h"
+#include "iotc_gencert.h"
 #include "iotc_mtb_time.h"
+#include "app_eeprom_data.h"
 
 #include "app_config.h"
 
 
 /////////////////////////////////////////////////////////////////////////////
 
-#define APP_VERSION_BASE "1.1.1"
+#define APP_VERSION_BASE "2.0.0"
 
 // Defined in common.mk then dereference in this Makefile with DEFINES+=
 #if defined(COUGH_MODEL)
@@ -42,6 +44,15 @@
 #else
 #define APP_VERSION ("?-" APP_VERSION_BASE)
 #endif
+
+
+typedef enum UserInputYnStatus {
+	APP_INPUT_NONE = 0,
+	APP_INPUT_YES,
+	APP_INPUT_NO
+} UserInputYnStatus;
+
+static UserInputYnStatus user_input_status = APP_INPUT_NONE;
 
 static bool is_demo_mode = false;
 static int reporting_interval = 2000;
@@ -184,8 +195,34 @@ static cy_rslt_t publish_telemetry(void) {
     return CY_RSLT_SUCCESS;
 }
 
+static void user_input_yn_task (void *pvParameters) {
+	TaskHandle_t *parent_task = pvParameters;
+
+	user_input_status = APP_INPUT_NONE;
+    printf("Do you wish to configure the device?(y/[n]):\n>");
+
+    int ch = getchar();
+    if (EOF == ch) {
+        printf("Got EOF?\n");
+        goto done;
+    }
+    if (ch == 'y' || ch == 'Y') {
+    	user_input_status = APP_INPUT_YES;
+    } else {
+    	user_input_status = APP_INPUT_NO;
+    }
+done:
+	xTaskNotifyGive(*parent_task);
+    while (1) {
+		taskYIELD();
+	}
+}
+
 void app_task(void *pvParameters) {
     (void) pvParameters;
+
+    UBaseType_t my_priority = uxTaskPriorityGet(NULL);
+    TaskHandle_t my_task = xTaskGetCurrentTaskHandle();
 
     // DO NOT print anything before we receive a message to avoice garbled output
 
@@ -193,7 +230,7 @@ void app_task(void *pvParameters) {
     while (!cm33_ipc_has_received_message()) {
         taskYIELD(); // wait for CM55
     }
-    printf("App Task: CM55 IPC is ready. Resuming the application...\n");
+    printf("\nApp Task: CM55 IPC is ready. Resuming the application...\n");
 
     char iotc_duid[IOTCL_CONFIG_DUID_MAX_LEN] = IOTCONNECT_DUID;
     if (0 == strlen(iotc_duid)) {
@@ -206,21 +243,48 @@ void app_task(void *pvParameters) {
         printf("Generated device unique ID (DUID) is: %s\n", iotc_duid);
     }
 
-    if (strlen(IOTCONNECT_DEVICE_CERT) == 0) {
-		printf("ERROR: Device certificate is missing. Please configure the /IOTCONNECT credentials in app_config.h\n");
+    if(app_eeprom_data_init()) {
+        printf("Failed to initialize EEPROM. Cannot continue.\n");
         goto exit_cleanup;
-	}
+    } else {
+        printf("EEPROM data loaded successfully. Data is %s.\n", app_eeprom_data_is_valid() ? "valid" : "invalid");
+    }
 
     IotConnectClientConfig config;
     iotconnect_sdk_init_config(&config);
-    config.connection_type = IOTCONNECT_CONNECTION_TYPE;
-    config.cpid = IOTCONNECT_CPID;
-    config.env =  IOTCONNECT_ENV;
+    if (strlen(IOTCONNECT_DEVICE_CERT) > 0) {
+        printf("Using certificate from app_config.h\n");
+    } else if (0 == strlen(app_eeprom_data_get_certificate(IOTCONNECT_DEVICE_CERT))) {
+	    printf("\nThe board needs to be configured.\n");
+	    app_eeprom_data_do_user_input(iotc_x509_generate_credentials);
+    } else {
+        // else ask the user if they want to re configure the board. Wait some time for user input...
+    	TaskHandle_t user_input_yn_task_handle;
+        xTaskCreate(user_input_yn_task, "User Input", 1024, &my_task, (my_priority - 1), &user_input_yn_task_handle);
+        ulTaskNotifyTake(pdTRUE, 4000);
+        vTaskDelete(user_input_yn_task_handle);
+
+        switch (user_input_status) {
+        	case  APP_INPUT_NONE:
+        	    printf("Timed out waiting for user input. Resuming...\n");
+        	    break;
+        	case  APP_INPUT_YES:
+        	    app_eeprom_data_do_user_input(iotc_x509_generate_credentials);
+        	    break;
+        	default:
+        	    printf("Bypassing device configuration.\n");
+        	    break;
+        }
+    }
+
+    config.connection_type = app_eeprom_data_get_platform(IOTCONNECT_CONNECTION_TYPE);
+    config.cpid = app_eeprom_data_get_cpid(IOTCONNECT_CPID);
+    config.env =  app_eeprom_data_get_env(IOTCONNECT_ENV);
     config.duid = iotc_duid;
     config.qos = 1;
     config.verbose = true;
-    config.x509_config.device_cert = IOTCONNECT_DEVICE_CERT;
-    config.x509_config.device_key = IOTCONNECT_DEVICE_KEY;
+    config.x509_config.device_cert = app_eeprom_data_get_certificate(IOTCONNECT_DEVICE_CERT);
+    config.x509_config.device_key = app_eeprom_data_get_private_key(IOTCONNECT_DEVICE_KEY);
     config.callbacks.status_cb = on_connection_status;
     config.callbacks.cmd_cb = on_command;
     config.callbacks.ota_cb = on_ota;
@@ -237,9 +301,14 @@ void app_task(void *pvParameters) {
     printf("DUID: %s\n", config.duid);
     printf("CPID: %s\n", config.cpid);
     printf("ENV: %s\n", config.env);
+    printf("WiFi SSID: %s\n", app_eeprom_data_get_wifi_ssid(WIFI_SSID));
+    printf("Device certificate:\n%s\n", app_eeprom_data_get_certificate(IOTCONNECT_DEVICE_CERT));
 
     // This will not return if it fails
-    wifi_app_connect();
+    wifi_app_connect(
+        app_eeprom_data_get_wifi_ssid(WIFI_SSID),
+        app_eeprom_data_get_wifi_pass(WIFI_PASSWORD)
+    );
 
     iotc_mtb_time_obtain(IOTCONNECT_SNTP_SERVER);
 

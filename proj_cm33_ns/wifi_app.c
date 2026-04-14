@@ -126,7 +126,7 @@ static cy_wcm_config_t wcm_config;
  *              error code indicating the failure.
  *
  ******************************************************************************/
-static cy_rslt_t wifi_connect(void)
+static cy_rslt_t wifi_connect(const char* ssid, const char* password)
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     cy_wcm_connect_params_t connect_param;
@@ -137,8 +137,13 @@ static cy_rslt_t wifi_connect(void)
     {
         /* Configure the connection parameters for the Wi-Fi interface. */
         memset(&connect_param, 0, sizeof(cy_wcm_connect_params_t));
-        memcpy(connect_param.ap_credentials.SSID, WIFI_SSID, sizeof(WIFI_SSID));
-        memcpy(connect_param.ap_credentials.password, WIFI_PASSWORD, sizeof(WIFI_PASSWORD));
+        strcpy((char * ) connect_param.ap_credentials.SSID, ssid);
+        if (NULL != password) {
+            strcpy((char * ) connect_param.ap_credentials.password, password);
+        } else {
+            // NOTE: Untested for open networks
+            printf("Open network specified. Attempting to connect without a password.\n");
+        }
         connect_param.ap_credentials.security = WIFI_SECURITY;
 
         printf("\nWi-Fi Connecting to '%s'\n", connect_param.ap_credentials.SSID);
@@ -277,7 +282,7 @@ static void app_sdio_init(void)
 }
 
 // This call will not return if it fails
-void wifi_app_connect(void) {
+void wifi_app_connect(const char* ssid, const char* password) {
 
     // psoc edge  needs this for WiFi
     app_sdio_init();
@@ -299,12 +304,16 @@ void wifi_app_connect(void) {
      * WCM initialization.
      */
     printf("Wi-Fi Connection Manager initialized.\n");
+    if (NULL == ssid) {
+        printf("Wi-Fi SSID and Password must be provided.\n");
+        while (1) { taskYIELD(); }
+    }
 
     /* Initiate connection to the Wi-Fi AP and cleanup if the operation fails. */
-    if (CY_RSLT_SUCCESS == wifi_connect()) {
+    if (CY_RSLT_SUCCESS == wifi_connect(ssid, password)) {
 		printf("wifi is connected.\n");
 	} else {
-		if (CY_RSLT_SUCCESS != wifi_connect()) {
+		if (CY_RSLT_SUCCESS != wifi_connect(ssid, password)) {
 			printf("wifi failed to connect.\n");
 			while (1) { taskYIELD(); }
 		}
