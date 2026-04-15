@@ -58,6 +58,8 @@ To quickly evaluate the project without development tools, you can download the 
 You can skip the VSCode and compiler setup in the Developer Guide and flash the extracted hex file with the MTB Programmer software.
 When flashing, ensure to select the "External Memory" option.
 
+To trigger the certificate to be re-generated, click the Programmer's *Erase* button when connected to the board and program the firmware again.
+
 - To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
 
 | Model name                  | Macro                       |

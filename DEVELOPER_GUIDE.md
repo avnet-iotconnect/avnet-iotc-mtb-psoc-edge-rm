@@ -169,6 +169,7 @@ UQRV
 ```
 * This information will always be displayed on boot-up. You will also have an option to enter "y" 
 at the *Do you wish to configure the device?* prompt to re-configure the values.
+* If you wish to re-generate the certificate, issue *Terminal -> Run Task -> Erase* and then program the firmware again.
 * Return to the /IOTCCONNECT browser window and copy the device certificate including the BEGIN and END lines.
 * Click **Save & View**.
 

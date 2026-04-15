@@ -63,13 +63,13 @@ static void on_connection_status(IotConnectConnectionStatus status) {
     // Add your own status handling
     switch (status) {
         case IOTC_CS_MQTT_CONNECTED:
-            printf("IoTConnect Client Connected notification.\n");
+            printf("/IOTCONNECT Client Connected notification.\n");
             break;
         case IOTC_CS_MQTT_DISCONNECTED:
-            printf("IoTConnect Client Disconnected notification.\n");
+            printf("/IOTCONNECT Client Disconnected notification.\n");
             break;
         default:
-            printf("IoTConnect Client ERROR notification\n");
+            printf("/IOTCONNECT Client ERROR notification\n");
             break;
     }
 }
@@ -314,14 +314,14 @@ void app_task(void *pvParameters) {
 
     cy_rslt_t ret = iotconnect_sdk_init(&config);
     if (CY_RSLT_SUCCESS != ret) {
-        printf("Failed to initialize the IoTConnect SDK. Error code: %u\n", (unsigned int) ret);
+        printf("Failed to initialize the /IOTCONNECT SDK. Error code: %u\n", (unsigned int) ret);
         goto exit_cleanup;
     }
 
     for (int i = 0; i < 10; i++) {
         ret = iotconnect_sdk_connect();
         if (CY_RSLT_SUCCESS != ret) {
-            printf("Failed to initialize the IoTConnect SDK. Error code: %u\n", (unsigned int) ret);
+            printf("Failed to initialize the /IOTCONNECT SDK. Error code: %u\n", (unsigned int) ret);
             goto exit_cleanup;
         }
         
