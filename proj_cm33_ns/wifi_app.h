@@ -43,6 +43,6 @@
 #ifndef WIFI_APP_H_
 #define WIFI_APP_H_
 
-void wifi_app_connect(void);
+void wifi_app_connect(const char* ssid, const char* password);
 
 #endif /* WIFI_APP_H_ */

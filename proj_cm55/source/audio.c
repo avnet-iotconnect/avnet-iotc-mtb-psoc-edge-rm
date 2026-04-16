@@ -348,8 +348,8 @@ void audio_task(void *pvParameters)
                         /* Only print non-label class very 10 predictions */
                         if (prediction_count>DETECTCOUNT)
                         {
-                            printf(".");
-                            fflush( stdout );
+                            //printf(".");
+                            // fflush( stdout );
                             prediction_count = 0;
                         }
                         /* Turn off LED after the LED is on for 500ms */

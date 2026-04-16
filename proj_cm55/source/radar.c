@@ -252,8 +252,7 @@ void deinterleave_antennas(uint16_t * buffer_ptr)
 void radar_task(void *pvParameters)
 {
     (void)pvParameters;
-    cy_rslt_t result = CY_RSLT_SUCCESS;
-
+    
     if (radar_init() != 0)
     {
         CY_ASSERT(0);
@@ -397,8 +396,8 @@ void processing_task(void *pvParameters)
                     /* only print non-label class very 10 predictions */
                     if (prediction_count>9)
                     {
-                        printf(".");
-                        fflush( stdout );
+                        // printf(".");
+                        //fflush( stdout );
                         prediction_count = 0;
                     }
                     /* turn off LED after the LED is on for 500ms */

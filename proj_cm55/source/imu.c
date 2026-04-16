@@ -347,8 +347,8 @@ static void task_motion(void* pvParameters)
                         /* Only print non-label class very 10 predictions */
                         if (prediction_count>DETECTCOUNT)
                         {
-                            printf(".");
-                            fflush( stdout );
+                            // printf(".");
+                            // fflush( stdout );
                             prediction_count = 0;
                         }
 

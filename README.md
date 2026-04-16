@@ -13,10 +13,9 @@ The audio models detect specific sounds:
 - Alarm
 
 Additional models perform different ML model detections with various board sensors:
-* Radar Gestures Model - Recognizes hand gestures in front of the board.  
-  [Getting Started Workshop with the PSOC Edge E84 AI Kit](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-ai)
-* Direction of Arrival (Audio) - Not supported at the moment.
-* Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
+- Radar Gestures Model - Recognizes hand gestures in front of the board.
+- Direction of Arrival (Audio) - Not supported at the moment.
+- Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
 
 Pre-trained models that are ready for production, referred to as "Ready Models," can be found on the [Imagimob Ready Model Landing Page](https://www.imagimob.com/ready-models). These models, when deployed on a device, are intended specifically for testing purposes and come with a limited number of inferences.
 
@@ -51,12 +50,15 @@ This application can receive Cloud-To-Device commands as well and control one of
 
 ## Set Up The Project
 
-To get quickly started with the DEEPCRAFT Ready Models on the PSOC Edge Kits, see the guides:  
-[PSoC Edge E84 AI Getting Started Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-ai)  
-[PSoC Edge E84 Eval Kit Getting Started Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/tree/main/documentation/iotc-psoc-edge-e84-eval)  
-
-For general instructions on how to set up and run this project, refer to the 
+To set up the project, please refer to the 
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
+
+To quickly evaluate the project without development tools, you can download the pre-built Gestures binary package at
+[avnet-iotc-mtb-psoc-edge-rm-gestures-v2.0.0.hex.zip](https://downloads.iotconnect.io/partners/infineon/demos/avnet-iotc-mtb-psoc-edge-rm-gestures-v2.0.0.hex.zip).
+You can skip the VSCode and compiler setup in the Developer Guide and flash the extracted hex file with the MTB Programmer software.
+When flashing, ensure to select the "External Memory" option.
+
+To trigger the certificate to be re-generated, click the Programmer's *Erase* button when connected to the board and program the firmware again.
 
 - To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
 
