@@ -7,7 +7,7 @@
 * Related Document : See README.md
 *
 *****************************************************************************
-* (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+* (c) 2025-2026, Infineon Technologies AG, or an affiliate of Infineon
 * Technologies AG. All rights reserved.
 * This software, associated documentation and materials ("Software") is
 * owned by Infineon Technologies AG or one of its affiliates ("Infineon")
@@ -18,7 +18,7 @@
 * agreement applies, then any use, reproduction, modification, translation, or
 * compilation of this Software is prohibited without the express written
 * permission of Infineon.
-* 
+*
 * Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
 * IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 * INCLUDING, BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF
@@ -216,7 +216,7 @@ cy_rslt_t audio_init(void)
     Cy_PDM_PCM_Channel_Init(CYBSP_PDM_HW, &channel_3_config, PDM_CHANNEL);
 
     /* Set the gain as per the model. */
-    #ifdef ALARM_MODEL
+    #if defined(ALARM_MODEL) || defined(SIREN_MODEL)
     Cy_PDM_PCM_SetGain(CYBSP_PDM_HW, PDM_CHANNEL, CY_PDM_PCM_SEL_GAIN_23DB);
     #else
     Cy_PDM_PCM_SetGain(CYBSP_PDM_HW, PDM_CHANNEL, CY_PDM_PCM_SEL_GAIN_5DB);
@@ -311,6 +311,10 @@ void audio_task(void *pvParameters)
 
             /*pass audio sample for enqueue*/
             result = IMAI_AED_enqueue(&data_in);
+            if (IMAI_RET_SUCCESS != result)
+            {
+                CY_ASSERT(0);
+            }
 
             switch(IMAI_AED_dequeue(label_scores))
             {

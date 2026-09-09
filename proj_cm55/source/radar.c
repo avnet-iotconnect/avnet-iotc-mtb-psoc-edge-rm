@@ -7,7 +7,7 @@
 * Related Document : See README.md
 *
 *****************************************************************************
-* (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+* (c) 2025-2026, Infineon Technologies AG, or an affiliate of Infineon
 * Technologies AG. All rights reserved.
 * This software, associated documentation and materials ("Software") is
 * owned by Infineon Technologies AG or one of its affiliates ("Infineon")
@@ -18,7 +18,7 @@
 * agreement applies, then any use, reproduction, modification, translation, or
 * compilation of this Software is prohibited without the express written
 * permission of Infineon.
-* 
+*
 * Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
 * IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 * INCLUDING, BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF
@@ -79,11 +79,23 @@
 /*****************************************************************************
  * Macros
  *****************************************************************************/
+#ifdef USE_KIT_PSE84_HMI
+#define RADAR_SPI_CONTROLLER_IRQ          (CYBSP_SPI_RADAR_CONTROLLER_IRQ)
+#define RADAR_SPI_CONTROLLER_HW           (CYBSP_SPI_RADAR_CONTROLLER_HW)
+#define RADAR_SPI_CONTROLLER_config       (CYBSP_SPI_RADAR_CONTROLLER_config)
+#define RADAR_SPI_SLAVE_SELECT            (CY_SCB_SPI_SLAVE_SELECT1)
+#else
+#define RADAR_SPI_CONTROLLER_IRQ          (CYBSP_SPI_CONTROLLER_IRQ)
+#define RADAR_SPI_CONTROLLER_HW           (CYBSP_SPI_CONTROLLER_HW)
+#define RADAR_SPI_CONTROLLER_config       (CYBSP_SPI_CONTROLLER_config)
+#define RADAR_SPI_SLAVE_SELECT            (CY_SCB_SPI_SLAVE_SELECT0)
+#endif
+
 #define INIT_SUCCESS            (0UL)
 #define INIT_FAILURE            (1UL)
 #define XENSIV_BGT60TRXX_IRQ_PRIORITY                      (1U)
 
-#define SPI_INTR_NUM        ((IRQn_Type) CYBSP_SPI_CONTROLLER_IRQ)
+#define SPI_INTR_NUM        ((IRQn_Type) RADAR_SPI_CONTROLLER_IRQ)
 #define SPI_INTR_PRIORITY   (2U)
 
 #define XENSIV_BGT60TRXX_SPI_FREQUENCY      (12000000UL)
@@ -125,7 +137,7 @@ void get_time_from_millisec_radar(unsigned long milliseconds, char* output);
 ********************************************************************************/
 cy_en_scb_spi_status_t init_status;
 cy_stc_scb_spi_context_t SPI_context;
-static volatile bool data_available = false;
+
 cy_stc_sysint_t irq_cfg;
 xensiv_bgt60trxx_mtb_t sensor;
 
@@ -171,7 +183,7 @@ void xensiv_bgt60trxx_interrupt_handler(void);
 *******************************************************************************/
 void mSPI_Interrupt(void)
 {
-    Cy_SCB_SPI_Interrupt(CYBSP_SPI_CONTROLLER_HW, &SPI_context);
+    Cy_SCB_SPI_Interrupt(RADAR_SPI_CONTROLLER_HW, &SPI_context);
 }
 
 /*******************************************************************************
@@ -252,7 +264,7 @@ void deinterleave_antennas(uint16_t * buffer_ptr)
 void radar_task(void *pvParameters)
 {
     (void)pvParameters;
-    
+
     if (radar_init() != 0)
     {
         CY_ASSERT(0);
@@ -277,27 +289,25 @@ void radar_task(void *pvParameters)
         CY_ASSERT(0);
     }
 
-    for(;;)
+    for (;;)
     {
-        if (data_available == true)
+        /* Wait here until ISR notifies us */
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    
+        if (xensiv_bgt60trxx_get_fifo_data(&sensor.dev, bgt60_buffer, NUM_SAMPLES_PER_FRAME) == XENSIV_BGT60TRXX_STATUS_OK)
         {
-            data_available = false;
-            if (xensiv_bgt60trxx_get_fifo_data(&sensor.dev, bgt60_buffer, NUM_SAMPLES_PER_FRAME) == XENSIV_BGT60TRXX_STATUS_OK)
-            {
-                deinterleave_antennas(bgt60_buffer);
-                /* Tell processing task to take over */
-                xTaskNotifyGive(processing_task_handler);
-            }
-            else
-            {
-                printf ("Radar error. Check SPI configuration \r\n");
-                  CY_ASSERT(0);
-            }    
+            deinterleave_antennas(bgt60_buffer);
+            /* Tell processing task to take over */
+            xTaskNotifyGive(processing_task_handler);
         }
+        else
+        {
+            printf ("Radar error. Check SPI configuration \r\n");
+            CY_ASSERT(0);
+        } 
     }
 }
      
-
 
 /*******************************************************************************
 * Function Name: processing_task
@@ -429,7 +439,6 @@ void processing_task(void *pvParameters)
 }
 
 
-
 /*******************************************************************************
 * Function Name: get_time_from_millisec_radar
 ********************************************************************************
@@ -471,7 +480,7 @@ static int32_t radar_init(void)
     cy_rslt_t result = CY_RSLT_SUCCESS;
     uint32_t status = INIT_SUCCESS;
     /* Enable the RADAR. */
-    sensor.iface.scb_inst = CYBSP_SPI_CONTROLLER_HW;
+    sensor.iface.scb_inst = RADAR_SPI_CONTROLLER_HW;
     sensor.iface.spi = &SPI_context;
     sensor.iface.sel_port = CYBSP_RSPI_CS_PORT;
     sensor.iface.sel_pin = CYBSP_RSPI_CS_PIN;
@@ -484,7 +493,7 @@ static int32_t radar_init(void)
     irq_cfg.intrSrc = sensor.iface.irq_num;
     irq_cfg.intrPriority = XENSIV_BGT60TRXX_IRQ_PRIORITY;
 
-    init_status = Cy_SCB_SPI_Init(CYBSP_SPI_CONTROLLER_HW, &CYBSP_SPI_CONTROLLER_config, &SPI_context);
+    init_status = Cy_SCB_SPI_Init(RADAR_SPI_CONTROLLER_HW, &RADAR_SPI_CONTROLLER_config, &SPI_context);
 
     /* If the initialization fails, update status */
     if ( CY_SCB_SPI_SUCCESS != init_status )
@@ -504,9 +513,9 @@ static int32_t radar_init(void)
         NVIC_EnableIRQ(SPI_INTR_NUM);
 
         /* Set active target select to line 0 */
-        Cy_SCB_SPI_SetActiveSlaveSelect(CYBSP_SPI_CONTROLLER_HW, CY_SCB_SPI_SLAVE_SELECT1);
+        Cy_SCB_SPI_SetActiveSlaveSelect(RADAR_SPI_CONTROLLER_HW, RADAR_SPI_SLAVE_SELECT);
         /* Enable SPI Controller block. */
-        Cy_SCB_SPI_Enable(CYBSP_SPI_CONTROLLER_HW);
+        Cy_SCB_SPI_Enable(RADAR_SPI_CONTROLLER_HW);
     }
     
     /* Reduce drive strength to improve EMI */
@@ -516,10 +525,16 @@ static int32_t radar_init(void)
     Cy_GPIO_SetDriveSel(CYBSP_RSPI_CLK_PORT, CYBSP_RSPI_CLK_PIN, CY_GPIO_DRIVE_1_8);
 
     result = xensiv_bgt60trxx_mtb_init(&sensor, register_list, XENSIV_BGT60TRXX_CONF_NUM_REGS);
-    CY_ASSERT(result == CY_RSLT_SUCCESS);
+    if (CY_RSLT_SUCCESS != result)
+    {
+        CY_ASSERT(0);
+    }
 
     result = xensiv_bgt60trxx_mtb_interrupt_init(&sensor, NUM_SAMPLES_PER_FRAME);
-    CY_ASSERT(result == CY_RSLT_SUCCESS);
+    if (CY_RSLT_SUCCESS != result)
+    {
+        CY_ASSERT(0);
+    }
     
     Cy_SysInt_Init(&irq_cfg, xensiv_bgt60trxx_interrupt_handler);
 
@@ -552,10 +567,16 @@ static int32_t radar_init(void)
 *******************************************************************************/
 void xensiv_bgt60trxx_interrupt_handler(void)
 {
-    data_available = true;
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;   
+     
     Cy_GPIO_ClearInterrupt(CYBSP_RADAR_INT_PORT, CYBSP_RADAR_INT_NUM);
     NVIC_ClearPendingIRQ(irq_cfg.intrSrc);
+
+    /* Send a notification to the task */
+    vTaskNotifyGiveFromISR(radar_task_handler, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
+
 
 /*******************************************************************************
  * Function Name: create_radar_task
