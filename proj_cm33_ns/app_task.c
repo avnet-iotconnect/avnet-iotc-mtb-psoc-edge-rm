@@ -26,7 +26,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 
-#define APP_VERSION_BASE "2.0.0"
+#define APP_VERSION_BASE "2.1.0"
 
 // Defined in common.mk then dereference in this Makefile with DEFINES+=
 #if defined(COUGH_MODEL)
@@ -35,6 +35,8 @@
 #define APP_VERSION ("A-" APP_VERSION_BASE)
 #elif defined(BABYCRY_MODEL)
 #define APP_VERSION ("B-" APP_VERSION_BASE)
+#elif defined(SIREN_MODEL)
+#define APP_VERSION ("S-" APP_VERSION_BASE)
 #elif defined(DIRECTIONOFARRIVAL_MODEL)
 #define APP_VERSION ("D-" APP_VERSION_BASE)
 #elif defined(FALLDETECTION_MODEL)

@@ -15,7 +15,7 @@
  *
  *
  *******************************************************************************
-* (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+* (c) 2025-2026, Infineon Technologies AG, or an affiliate of Infineon
 * Technologies AG. All rights reserved.
 * This software, associated documentation and materials ("Software") is
 * owned by Infineon Technologies AG or one of its affiliates ("Infineon")
@@ -26,7 +26,7 @@
 * agreement applies, then any use, reproduction, modification, translation, or
 * compilation of this Software is prohibited without the express written
 * permission of Infineon.
-* 
+*
 * Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
 * IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 * INCLUDING, BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF
@@ -160,14 +160,12 @@ static void doa_task(void* pvParameters)
     /* LED variables */
     static int led_off = 0;
     static int led_on = 0;
-    static int send_data = 0;
     int label_scores[IMAI_DATAOUT_COUNT];
     static int prediction_count = 0;
 
     /* Initialize SysTick timer */
     doa_init();
 
-    unsigned long start_t = tick1;
     const char* class_map[] = IMAI_DATAOUT_SYMBOLS;
 
     for (;;)
@@ -183,7 +181,12 @@ static void doa_task(void* pvParameters)
             {
                 data_in[j] = (float)audio_data[i][j];
             }
+
             result = IMAI_DOA_enqueue(data_in);
+            if (IMAI_RET_SUCCESS != result)
+            {
+                CY_ASSERT(0);
+            }
 
             switch (IMAI_DOA_dequeue(label_scores))
             {

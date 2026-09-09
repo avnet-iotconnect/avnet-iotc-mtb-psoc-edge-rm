@@ -6,7 +6,7 @@
 # Makefile for configuring the Cortex-M55 core project
 #
 ################################################################################
-# (c) 2025, Infineon Technologies AG, or an affiliate of Infineon
+# (c) 2025-2026, Infineon Technologies AG, or an affiliate of Infineon
 # Technologies AG. All rights reserved.
 # This software, associated documentation and materials ("Software") is
 # owned by Infineon Technologies AG or one of its affiliates ("Infineon")
@@ -45,14 +45,21 @@ include ../common.mk
 
 ifeq (,$(filter $(TARGET),APP_KIT_PSE84_EVAL_EPC2 APP_KIT_PSE84_EVAL_EPC4))
 else
-    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL DIRECTIONOFARRIVAL_MODEL FALLDETECTION_MODEL))
+    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL DIRECTIONOFARRIVAL_MODEL FALLDETECTION_MODEL SIREN_MODEL))
         $(error Invalid MODEL_SELECTION "$(MODEL_SELECTION)" for TARGET=$(TARGET))
     endif
 endif
 
 ifeq (,$(filter $(TARGET),APP_KIT_PSE84_AI))
 else
-    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL GESTURE_MODEL DIRECTIONOFARRIVAL_MODEL FALLDETECTION_MODEL))
+    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL GESTURE_MODEL DIRECTIONOFARRIVAL_MODEL FALLDETECTION_MODEL SIREN_MODEL))
+        $(error Invalid MODEL_SELECTION "$(MODEL_SELECTION)" for TARGET=$(TARGET))
+    endif
+endif
+
+ifeq (,$(filter $(TARGET),APP_KIT_PSE84_HMI))
+else
+    ifeq (,$(filter $(strip $(MODEL_SELECTION)),COUGH_MODEL ALARM_MODEL BABYCRY_MODEL GESTURE_MODEL DIRECTIONOFARRIVAL_MODEL SIREN_MODEL))
         $(error Invalid MODEL_SELECTION "$(MODEL_SELECTION)" for TARGET=$(TARGET))
     endif
 endif
@@ -70,7 +77,11 @@ VERBOSE=
 #
 # float    -- floating point for the input data and weights
 # int8x8   -- 8-bit fixed-point for the input data and weights
+ifeq (SIREN_MODEL, $(MODEL_SELECTION))
+NN_TYPE=float
+else
 NN_TYPE=int8x8
+endif
 
 # Choose the inference engine
 # tflm      -- TensorFlow Lite for Microcontrollers inference engine with interpreter
@@ -183,6 +194,12 @@ DEFINES+=DIRECTIONOFARRIVAL_MODEL
 LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/doa_lib_eval.a
 endif
 
+ifeq (SIREN_MODEL, $(MODEL_SELECTION))
+DEFINES+=SIREN_MODEL
+# Additional / custom libraries to link in to the application.
+LDLIBS+=./ready_models/CONFIG_$(CONFIG)/TOOLCHAIN_$(TOOLCHAIN)/siren_lib_eval.a
+endif
+
 
 ifeq (GESTURE_MODEL, $(MODEL_SELECTION))
   CY_IGNORE+=source/audio.c
@@ -209,14 +226,35 @@ else
   endif
 endif
 
+# Option to remap the sensor orienation to align with CY8CKIT-062S2-AI.
+#
+# ENABLED   - Sensor data is remapped 
+#
+# DISABLED  - Actual sensor data 
+SENSOR_REMAPPING=DISABLED
+
+ifeq ($(SENSOR_REMAPPING),ENABLED)
+DEFINES+=USE_SENSOR_REMAPPING
+endif
+
+# Check which kit is being used
+ifeq (APP_KIT_PSE84_HMI, $(TARGET))
+DEFINES+=USE_KIT_PSE84_HMI
+endif
+
 # Select softfp or hardfp floating point. Default is softfp.
 VFP_SELECT+=hardfp
+
+ifeq ($(VFP_SELECT),softfp)
+$(error softfp floating point is not supported for this code example)
+endif
 
 # Additional / custom C compiler flags.
 #
 # NOTE: Includes and defines should use the INCLUDES and DEFINES variable
 # above.
-CFLAGS+=
+# CFLAG is added to avoid warning from sensor-dsp library fetched by xensiv-radar-presence library
+CFLAGS+=-fno-finite-math-only
 
 # Additional / custom C++ compiler flags.
 #

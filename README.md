@@ -1,21 +1,25 @@
 ## Avnet PSOC™ Edge DEEPCRAFT™ Ready Models
 
 This demo project is the integration of Infineon's 
-[PSOC&trade; Edge MCU: DEEPCRAFT&trade; Ready Model deployment](https://github.com/Infineon/mtb-example-psoc-edge-ml-deepcraft-deploy-ready-model/tree/release-v1.2.0)
+[PSOC&trade; Edge MCU: DEEPCRAFT&trade; Ready Model deployment](https://github.com/Infineon/mtb-example-psoc-edge-ml-deepcraft-deploy-ready-model/tree/release-v1.4.1)
 and [Avnet /IOTCONNECT ModusToolbox&trade; SDK](https://github.com/avnet-iotconnect/avnet-iotc-mtb-sdk). 
 
 The project includes various DEEPCRAFT&trade; Ready Model which are chosen at compile time by 
 selecting the model in [common.mk](common.mk)
 
 The audio models detect specific sounds:
-- Baby cry
-- Cough
-- Alarm
+- [Baby Cry Detection](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-baby-cry-detection) (default model in the project)
+- [Cough Detection](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-cough-detection)
+- [Factory Alarm Detection](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-factory-alarm-detection)
+- [Siren Detection](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-siren-detection)
 
 Additional models perform different ML model detections with various board sensors:
-- Radar Gestures Model - Recognizes hand gestures in front of the board.
-- Direction of Arrival (Audio) - Not supported at the moment.
-- Fall Detection - Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
+- [Gesture Classification](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-gesture-classification) - 
+     Recognizes hand gestures in front of the board using the built-in radar.
+- [Direction of Arrival (Sound)](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-direction-of-arrival-Sound) - 
+     Not supported at the moment.
+- [Fall Detection](https://www.infineon.com/design-resources/embedded-software/deepcraft-edge-ai-solutions/deepcraft-ready-models/deepcraft-ready-model-for-fall-detection) - 
+     Uses accelerometer data from the BMI270 sensor to detect a person falling, while the board is attached to the person's wrist.
 
 Pre-trained models that are ready for production, referred to as "Ready Models," can be found on the [Imagimob Ready Model Landing Page](https://www.imagimob.com/ready-models). These models, when deployed on a device, are intended specifically for testing purposes and come with a limited number of inferences.
 
@@ -53,25 +57,37 @@ This application can receive Cloud-To-Device commands as well and control one of
 To set up the project, please refer to the 
 [/IOTCONNECT ModusToolbox&trade; PSOC Edge Developer Guide](DEVELOPER_GUIDE.md)
 
-To quickly evaluate the project without development tools, you can download the pre-built Gestures binary package at
-[avnet-iotc-mtb-psoc-edge-rm-gestures-v2.0.0.hex.zip](https://downloads.iotconnect.io/partners/infineon/demos/avnet-iotc-mtb-psoc-edge-rm-gestures-v2.0.0.hex.zip).
-You can skip the VSCode and compiler setup in the Developer Guide and flash the extracted hex file with the MTB Programmer software.
-When flashing, ensure to select the "External Memory" option.
+If you have the *PSOC&trade; Edge AI kit* board, you can quickly evaluate the project without development tools.
+You can download the pre-built Gestures binary package at
+[avnet-iotc-mtb-psoc-edge-rm-gestures-v2.1.0.hex.zip](https://downloads.iotconnect.io/partners/infineon/demos/avnet-iotc-mtb-psoc-edge-rm-gestures-v2.1.0.hex.zip).
+and skip the VSCode and compiler setup in the Developer Guide, and then follow the steps Programmer below.
 
-To trigger the certificate to be re-generated, click the Programmer's *Erase* button when connected to the board and program the firmware again.
+MTB Programmer Steps:
+- Extract the hex file from the downloaded zip.
+- Start the MTB programmer and plug in the board.
+- If asked to upgrade the KitProg3 firmware, it is recommended to do so. You may need to re-plug the board after the firmware upgrade.
+- From top *Programmer/Board ID* pulldown, select your board.
+- Select the *External Memory* checkbox.
+- Click the *Open* button on the top left and select the extracted hex file.
+- Click the *Connect* and then the *Program* button to flash the hex file to the board.
+
+Please note that when using either approach (Hex download, or building from source)
+you can re-generate your board certificate by fully erasing the board's flash with the MTB Programmer. 
+Click the Programmer's *Erase* button when connected to the board and program the firmware again.
 
 - To select the model, update the `MODEL_SELECTION` variable in the [common.mk](common.mk):
 
-| Model name                  | Macro                       |
-|:----------------------------|:----------------------------|
-| Cough detection             | `COUGH_MODEL`               |
-| Alarm detection             | `ALARM_MODEL`               |
-| Baby cry detection          | `BABYCRY_MODEL`             |
-| Gesture detection           | `GESTURE_MODEL`             |
-| Directio of Arrival (Sound) | `DIRECTIONOFARRIVAL_MODEL`  |
-| Fall detection              | `FALLDETECTION_MODEL`       |
+| Model name                   | Macro                      |
+|:-----------------------------|:---------------------------|
+| Cough Detection              | `COUGH_MODEL`              |
+| Alarm Detection              | `ALARM_MODEL`              |
+| Baby Cry Detection           | `BABYCRY_MODEL`            |
+| Siren Detection              | `SIREN_MODEL`              |
+| Gesture Detection            | `GESTURE_MODEL`            |
+| Direction of Arrival (Sound) | `DIRECTIONOFARRIVAL_MODEL` |
+| Fall Detection               | `FALLDETECTION_MODEL`      |
 
-> **Note:** Currently, gesture detection model is supported only for the PSOC&trade; Edge AI kit.
+> **Note:** The gesture detection model is supported only for the PSOC&trade; Edge AI kit.
 
 ## Running The Demo
 
