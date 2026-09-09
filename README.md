@@ -100,6 +100,7 @@ This can be tested by placing the board in such way so that the microphone close
   * [Baby Cry](https://www.youtube.com/watch?v=Rwj1_eWltJQ&t=265s)
   * [Cough](https://www.youtube.com/watch?v=Qp09X74kjBc)
   * [Alarm](https://www.youtube.com/watch?v=hFIJaB6kVzk)
+  * [Siren](https://www.youtube.com/watch?v=45ZlCJDpqL4)
 
 
 - For Gesture detection model, if having issues with detections, 
