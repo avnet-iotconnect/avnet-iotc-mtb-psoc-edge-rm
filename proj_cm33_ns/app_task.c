@@ -220,6 +220,15 @@ done:
 	}
 }
 
+// Returns true if platform, CPID, ENV and WiFi credentials are available either from EEPROM or hard-coded
+static bool is_config_available(void) {
+    return IOTC_CT_UNDEFINED != app_eeprom_data_get_platform(IOTCONNECT_CONNECTION_TYPE)
+        && strlen(app_eeprom_data_get_cpid(IOTCONNECT_CPID)) > 0
+        && strlen(app_eeprom_data_get_env(IOTCONNECT_ENV)) > 0
+        && strlen(app_eeprom_data_get_wifi_ssid(WIFI_SSID)) > 0
+        && strlen(app_eeprom_data_get_wifi_pass(WIFI_PASSWORD)) > 0;
+}
+
 void app_task(void *pvParameters) {
     (void) pvParameters;
 
@@ -256,14 +265,19 @@ void app_task(void *pvParameters) {
     iotconnect_sdk_init_config(&config);
     if (strlen(IOTCONNECT_DEVICE_CERT) > 0) {
         printf("Using certificate from app_config.h\n");
-    } else if (0 == strlen(app_eeprom_data_get_certificate(IOTCONNECT_DEVICE_CERT))) {
+    } else if (0 == strlen(app_eeprom_data_get_certificate(IOTCONNECT_DEVICE_CERT)) && !is_config_available()) {
 	    printf("\nThe board needs to be configured.\n");
 	    app_eeprom_data_do_user_input(iotc_x509_generate_credentials);
     } else {
-        // else ask the user if they want to re configure the board. Wait some time for user input...
+        // Settings are available (from EEPROM or hard-coded). Make sure that we have a cert/key pair in EEPROM.
+        if (0 != app_eeprom_data_ensure_credentials(iotc_x509_generate_credentials)) {
+            printf("Failed to generate or store the device credentials. Cannot continue.\n");
+            goto exit_cleanup;
+        }
+        // Ask the user if they want to re configure the board. Wait some time for user input...
     	TaskHandle_t user_input_yn_task_handle;
         xTaskCreate(user_input_yn_task, "User Input", 1024, &my_task, (my_priority - 1), &user_input_yn_task_handle);
-        ulTaskNotifyTake(pdTRUE, 4000);
+        ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(APP_CONFIG_PROMPT_TIMEOUT_MS));
         vTaskDelete(user_input_yn_task_handle);
 
         switch (user_input_status) {

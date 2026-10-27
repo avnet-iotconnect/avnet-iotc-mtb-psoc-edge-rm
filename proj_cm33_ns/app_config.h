@@ -8,10 +8,11 @@
 
 #include "iotconnect.h"
 
+// Hard-coded platform/CPID/ENV are used only if the corresponding EEPROM runtime configuration values are empty.
 // see IotConnectConnectionType: IOTC_CT_AWS or IOTC_CT_AZURE
-#define IOTCONNECT_CONNECTION_TYPE IOTC_CT_UNDEFINED
-#define IOTCONNECT_CPID "your-cpid"
-#define IOTCONNECT_ENV  "your-env"
+#define IOTCONNECT_CONNECTION_TYPE IOTC_CT_AWS
+#define IOTCONNECT_CPID "7f68eedd5bdc459baa4d375993790099"
+#define IOTCONNECT_ENV  "prod"
 
 // If Device Unique ID (DUID) is not provided, a generated DUID will be used using the below prefix
 #define IOTCONNECT_DUID "" 
@@ -37,6 +38,9 @@ In that case, you would need to delete and re-create your device in IoTConnect.
 */
 #define IOTCONNECT_DEVICE_CERT ""
 #define IOTCONNECT_DEVICE_KEY ""
+
+// How long to wait for the user to answer "Do you wish to configure the device?" before proceeding with current settings
+#define APP_CONFIG_PROMPT_TIMEOUT_MS 3000
 
 // you can choose to use your own NTP server to obtain network time, or simply time.google.com for better stability
 #define IOTCONNECT_SNTP_SERVER "pool.ntp.org"

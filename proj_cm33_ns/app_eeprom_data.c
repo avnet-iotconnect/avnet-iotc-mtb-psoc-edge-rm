@@ -145,7 +145,7 @@ static const char* get_str_value_or_default(const char * value, const char* defa
 }
 
 IotConnectConnectionType app_eeprom_data_get_platform(IotConnectConnectionType default_value) {
-	if (!app_eeprom_data_is_valid()) {
+	if (!app_eeprom_data_is_valid() || IOTC_CT_UNDEFINED == (IotConnectConnectionType) app_eeprom_data.platform) {
 		return default_value;
 	}
 	return (IotConnectConnectionType) app_eeprom_data.platform;
@@ -302,6 +302,37 @@ void app_eeprom_save_dummy_data() {
     cy_en_em_eeprom_status_t eeprom_return_value;
     eeprom_return_value = Cy_Em_EEPROM_Write(LOGICAL_EEPROM_START, &app_eeprom_data, sizeof(app_eeprom_data), &eeprom_context);
 	handle_error(eeprom_return_value, "Emulated EEPROM Write failed \r\n");
+}
+
+int app_eeprom_data_ensure_credentials(IotcX509CredentialsGenerate x509_creds_generate_cb) {
+	if (app_eeprom_data_is_valid() && strlen(app_eeprom_data.pem_certificate) > 0) {
+		return 0;
+	}
+
+	if (!app_eeprom_data_is_valid()) {
+		// Store only the cert/key. Empty platform/CPID/ENV/WiFi values fall back to the hard-coded defaults.
+		memset(&app_eeprom_data, 0, sizeof(app_eeprom_data));
+	}
+	memset(app_eeprom_data.pem_certificate, 0, sizeof(app_eeprom_data.pem_certificate));
+	memset(app_eeprom_data.pem_private_key, 0, sizeof(app_eeprom_data.pem_private_key));
+
+	printf("Generating the device certificate and key pair...\n");
+	int ret = x509_creds_generate_cb(
+			app_eeprom_data.pem_certificate,
+			sizeof(app_eeprom_data.pem_certificate),
+			app_eeprom_data.pem_private_key,
+			sizeof(app_eeprom_data.pem_private_key)
+	);
+	if (0 != ret) {
+		printf("ERROR: Unable to generate the device certificate and key pair!\n");
+		return ret;
+	}
+
+	app_eeprom_data.version = APP_DATA_VERSION;
+	cy_en_em_eeprom_status_t eeprom_return_value;
+	eeprom_return_value = Cy_Em_EEPROM_Write(LOGICAL_EEPROM_START, &app_eeprom_data, sizeof(app_eeprom_data), &eeprom_context);
+	handle_error(eeprom_return_value, "Emulated EEPROM Write failed \r\n");
+	return (CY_EM_EEPROM_SUCCESS == eeprom_return_value) ? 0 : -1;
 }
 
 int app_eeprom_data_init(void) {

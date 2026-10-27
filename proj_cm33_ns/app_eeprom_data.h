@@ -15,6 +15,10 @@ int app_eeprom_data_init(void);
 
 void app_eeprom_data_do_user_input(IotcX509CredentialsGenerate x509_creds_generate_cb);
 
+// Generates and stores the device cert/key in EEPROM (without prompting the user) if not already stored.
+// Returns 0 on success.
+int app_eeprom_data_ensure_credentials(IotcX509CredentialsGenerate x509_creds_generate_cb);
+
 bool app_eeprom_data_is_valid(void);
 
 IotConnectConnectionType app_eeprom_data_get_platform(IotConnectConnectionType default_value);
